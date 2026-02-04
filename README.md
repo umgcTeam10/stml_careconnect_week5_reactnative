@@ -37,7 +37,7 @@ Optional but helpful:
 ## Getting Started
 
 1) Clone the repo
-```bash
+
 git clone https://github.com/umgcTeam10/stml_careconnect_week5_reactnative.git
 cd stml_careconnect_week5_reactnative/careconnect-week5-rn
 
