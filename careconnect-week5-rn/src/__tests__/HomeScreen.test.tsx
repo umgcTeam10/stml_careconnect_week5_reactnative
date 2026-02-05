@@ -1,64 +1,130 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from "@testing-library/react-native";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { HomeScreen } from '@/src/screens/HomeScreen';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { HomeScreen } from "@/src/screens/HomeScreen";
 
 const createNavigation = () => ({
   navigate: jest.fn(),
+  setOptions: jest.fn(),
 });
 
-describe('HomeScreen', () => {
+describe("HomeScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
   });
 
-  it('shows the home placeholder and missing role', async () => {
+  it("renders the home dashboard layout and default patient role", async () => {
     const navigation = createNavigation();
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
     const { getByText } = render(
-      <HomeScreen navigation={navigation as any} route={{ key: 'Home', name: 'Home' } as any} />
+      <HomeScreen
+        navigation={navigation as any}
+        route={{ key: "Home", name: "Home" } as any}
+      />,
     );
 
-    expect(getByText('Home (placeholder)')).toBeTruthy();
+    expect(getByText("Your Health Today")).toBeTruthy();
+    expect(getByText("How are you feeling today?")).toBeTruthy();
+    expect(getByText("Next Appointment")).toBeTruthy();
+    expect(getByText("Recent Wellness Check")).toBeTruthy();
+    expect(getByText("Health Summary")).toBeTruthy();
+    expect(getByText("Now: Physical Therapy Appointment")).toBeTruthy();
     await waitFor(() => {
-      expect(getByText('Selected role: Not set')).toBeTruthy();
+      expect(getByText("Patient")).toBeTruthy();
     });
+    expect(navigation.setOptions).toHaveBeenCalledWith({ headerShown: false });
   });
 
-  it('navigates to health logs when pressed', () => {
+  it("navigates to health logs from full history button", () => {
     const navigation = createNavigation();
     const { getByTestId } = render(
-      <HomeScreen navigation={navigation as any} route={{ key: 'Home', name: 'Home' } as any} />
+      <HomeScreen
+        navigation={navigation as any}
+        route={{ key: "Home", name: "Home" } as any}
+      />,
     );
 
-    fireEvent.press(getByTestId('home-health-logs'));
-    expect(navigation.navigate).toHaveBeenCalledWith('HealthLogs');
+    fireEvent.press(getByTestId("home-health-logs"));
+    expect(navigation.navigate).toHaveBeenCalledWith("HealthLogs");
   });
 
-  it('shows stored caregiver role and can change role', async () => {
+  it("navigates from every dashboard action", () => {
     const navigation = createNavigation();
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce('caregiver');
+    const { getByLabelText, getByTestId } = render(
+      <HomeScreen
+        navigation={navigation as any}
+        route={{ key: "Home", name: "Home" } as any}
+      />,
+    );
+
+    fireEvent.press(getByLabelText("Change role"));
+    fireEvent.press(getByLabelText("Log Wellness Check"));
+    fireEvent.press(getByLabelText("View all tasks"));
+    fireEvent.press(getByLabelText("View all wellness checks"));
+    fireEvent.press(getByLabelText("Send message"));
+    fireEvent.press(getByLabelText("View appointment details"));
+    fireEvent.press(getByTestId("home-health-logs"));
+
+    expect(navigation.navigate).toHaveBeenNthCalledWith(1, "Auth", {
+      screen: "Role",
+    });
+    expect(navigation.navigate).toHaveBeenNthCalledWith(2, "HealthLogs");
+    expect(navigation.navigate).toHaveBeenNthCalledWith(3, "Tasks");
+    expect(navigation.navigate).toHaveBeenNthCalledWith(4, "HealthLogs");
+    expect(navigation.navigate).toHaveBeenNthCalledWith(5, "Messages");
+    expect(navigation.navigate).toHaveBeenNthCalledWith(6, "Calendar");
+    expect(navigation.navigate).toHaveBeenNthCalledWith(7, "HealthLogs");
+  });
+
+  it("shows stored caregiver role and can change role", async () => {
+    const navigation = createNavigation();
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce("caregiver");
     const { getByText, getByLabelText } = render(
-      <HomeScreen navigation={navigation as any} route={{ key: 'Home', name: 'Home' } as any} />
+      <HomeScreen
+        navigation={navigation as any}
+        route={{ key: "Home", name: "Home" } as any}
+      />,
     );
 
     await waitFor(() => {
-      expect(getByText('Selected role: Caregiver')).toBeTruthy();
+      expect(getByText("Caregiver")).toBeTruthy();
     });
 
-    fireEvent.press(getByLabelText('Change role'));
-    expect(navigation.navigate).toHaveBeenCalledWith('Auth', { screen: 'Role' });
+    fireEvent.press(getByLabelText("Change role"));
+    expect(navigation.navigate).toHaveBeenCalledWith("Auth", {
+      screen: "Role",
+    });
   });
 
-  it('shows stored care recipient role', async () => {
+  it("shows stored care recipient role", async () => {
     const navigation = createNavigation();
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce('careRecipient');
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce("careRecipient");
     const { getByText } = render(
-      <HomeScreen navigation={navigation as any} route={{ key: 'Home', name: 'Home' } as any} />
+      <HomeScreen
+        navigation={navigation as any}
+        route={{ key: "Home", name: "Home" } as any}
+      />,
     );
 
     await waitFor(() => {
-      expect(getByText('Selected role: Care Recipient')).toBeTruthy();
+      expect(getByText("Patient")).toBeTruthy();
+    });
+  });
+
+  it("falls back to patient role when role storage read fails", async () => {
+    const navigation = createNavigation();
+    (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(
+      new Error("storage unavailable"),
+    );
+    const { getByText } = render(
+      <HomeScreen
+        navigation={navigation as any}
+        route={{ key: "Home", name: "Home" } as any}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(getByText("Patient")).toBeTruthy();
     });
   });
 });
