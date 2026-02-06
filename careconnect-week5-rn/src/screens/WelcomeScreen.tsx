@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView,StatusBar, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
@@ -97,6 +97,12 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     gap: spacing.sm,
+  },
+  loginRow: {
+  width: "100%",
+  alignItems: "flex-end",
+  paddingTop: Platform.OS === "android" ? (StatusBar.currentHeight || 0) + 8 : 8,
+  paddingRight: 12,
   },
   logoCircle: {
     width: 72,
