@@ -1,3 +1,4 @@
+import { Feather } from "@expo/vector-icons";
 import {
   ScrollView,
   StyleSheet,
@@ -84,181 +85,218 @@ export function TasksScreen() {
   const handlePress = () => undefined;
 
   return (
-    <ScrollView contentContainerStyle={styles.content} style={styles.container}>
-      <View style={styles.summaryRow}>
-        {summaryItems.map((item) => {
-          const toneStyle = summaryToneStyles[item.tone];
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.summaryRow}>
+          {summaryItems.map((item) => {
+            const toneStyle = summaryToneStyles[item.tone];
 
-          return (
-            <View
-              key={item.label}
-              style={[
-                styles.summaryCard,
-                {
-                  borderColor: toneStyle.borderColor,
-                  backgroundColor: toneStyle.backgroundColor,
-                },
-              ]}
-            >
-              <Text
-                style={[styles.summaryValue, { color: toneStyle.valueColor }]}
+            return (
+              <View
+                key={item.label}
+                style={[
+                  styles.summaryCard,
+                  {
+                    borderColor: toneStyle.borderColor,
+                    backgroundColor: toneStyle.backgroundColor,
+                  },
+                ]}
               >
-                {item.value}
-              </Text>
-              <Text style={styles.summaryLabel}>{item.label}</Text>
-            </View>
-          );
-        })}
-      </View>
-
-      <View style={styles.actionsRow}>
-        <View style={styles.addTaskButtonWrap}>
-          <PrimaryButton
-            accessibilityLabel="Add task"
-            onPress={handlePress}
-            title="+  Add Task"
-          />
-        </View>
-        <TouchableOpacity
-          accessibilityLabel="Filter tasks"
-          accessibilityRole="button"
-          onPress={handlePress}
-          style={styles.filterButton}
-        >
-          <Text style={styles.filterButtonText}>Filter</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.overdueBanner}>
-        <View style={styles.overdueBannerLeft}>
-          <View style={styles.overdueIconCircle}>
-            <Text style={styles.overdueIconText}>!</Text>
-          </View>
-          <Text style={styles.overdueBannerText}>You have 2 overdue tasks</Text>
-        </View>
-        <TouchableOpacity
-          accessibilityLabel="View overdue tasks"
-          accessibilityRole="button"
-          onPress={handlePress}
-          style={styles.overdueViewButton}
-        >
-          <Text style={styles.overdueViewButtonText}>View</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.nowCard}>
-        <View style={styles.nowHeader}>
-          <View style={styles.nowIconCircle}>
-            <Text style={styles.nowIconText}>!</Text>
-          </View>
-          <View style={styles.nowBody}>
-            <View style={styles.nowBadgeRow}>
-              <View style={styles.nowBadge}>
-                <Text style={styles.nowBadgeText}>Now</Text>
+                <Text
+                  style={[styles.summaryValue, { color: toneStyle.valueColor }]}
+                >
+                  {item.value}
+                </Text>
+                <Text style={styles.summaryLabel}>{item.label}</Text>
               </View>
-              <View style={styles.nowTypeBadge}>
-                <Text style={styles.nowTypeBadgeText}>PT</Text>
-              </View>
-            </View>
-            <Text style={styles.nowTitle}>Physical Therapy Appointment</Text>
-            <Text style={styles.nowMeta}>Due now - 02:00 PM | At clinic</Text>
-          </View>
+            );
+          })}
         </View>
-        <View style={styles.nowActionsRow}>
-          <View style={styles.halfActionButton}>
+
+        <View style={styles.actionsRow}>
+          <View style={styles.addTaskButtonWrap}>
             <PrimaryButton
-              accessibilityLabel="Start task now"
+              accessibilityLabel="Add task"
               onPress={handlePress}
-              title="Start"
+              title="+  Add Task"
             />
           </View>
           <TouchableOpacity
-            accessibilityLabel="Snooze task for 10 minutes"
+            accessibilityLabel="Filter tasks"
             accessibilityRole="button"
             onPress={handlePress}
-            style={styles.secondaryActionButton}
+            style={styles.filterButton}
           >
-            <Text style={styles.secondaryActionButtonText}>Snooze 10 min</Text>
+            <Text style={styles.filterButtonText}>Filter</Text>
           </TouchableOpacity>
         </View>
-      </View>
 
-      <View style={styles.tabsRow}>
-        {taskTabs.map((tabLabel) => {
-          const isSelected = tabLabel === "Upcoming";
+        <View style={styles.overdueBanner}>
+          <View style={styles.overdueBannerLeft}>
+            <View style={styles.overdueIconCircle}>
+              <Text style={styles.overdueIconText}>!</Text>
+            </View>
+            <Text style={styles.overdueBannerText}>
+              You have 2 overdue tasks
+            </Text>
+          </View>
+          <TouchableOpacity
+            accessibilityLabel="View overdue tasks"
+            accessibilityRole="button"
+            onPress={handlePress}
+            style={styles.overdueViewButton}
+          >
+            <Text style={styles.overdueViewButtonText}>View</Text>
+          </TouchableOpacity>
+        </View>
 
-          return (
-            <TouchableOpacity
-              key={tabLabel}
-              accessibilityLabel={`Show ${tabLabel.toLowerCase()} tasks`}
-              accessibilityRole="button"
-              onPress={handlePress}
-              style={[styles.tabButton, isSelected && styles.tabButtonSelected]}
-            >
-              <Text
-                numberOfLines={1}
-                style={[
-                  styles.tabButtonText,
-                  isSelected && styles.tabButtonTextSelected,
-                ]}
-              >
-                {tabLabel}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-
-      {upcomingTasks.map((task) => (
-        <View key={task.id} style={styles.taskCard}>
-          <View style={styles.taskCardBody}>
-            <TouchableOpacity
-              accessibilityLabel={`Mark ${task.title} done`}
-              accessibilityRole="checkbox"
-              accessibilityState={{ checked: false }}
-              onPress={handlePress}
-              style={styles.checkbox}
-            />
-            <View style={styles.taskDetails}>
-              <View style={styles.taskTitleRow}>
-                <View style={styles.taskTypeBadge}>
-                  <Text style={styles.taskTypeBadgeText}>{task.shortType}</Text>
+        <View style={styles.nowCard}>
+          <View style={styles.nowHeader}>
+            <View style={styles.nowIconCircle}>
+              <Text style={styles.nowIconText}>!</Text>
+            </View>
+            <View style={styles.nowBody}>
+              <View style={styles.nowBadgeRow}>
+                <View style={styles.nowBadge}>
+                  <Text style={styles.nowBadgeText}>Now</Text>
                 </View>
-                <Text style={styles.taskTitle}>{task.title}</Text>
-              </View>
-              <Text style={styles.taskSubtitle}>{task.subtitle}</Text>
-              <View style={styles.taskMetaRow}>
-                <Text style={styles.taskMetaText}>Time {task.time}</Text>
-                <Text style={styles.taskMetaText}>Date {task.date}</Text>
-                <View style={styles.priorityBadge}>
-                  <Text style={styles.priorityBadgeText}>{task.priority}</Text>
+                <View style={styles.nowTypeBadge}>
+                  <Text style={styles.nowTypeBadgeText}>PT</Text>
                 </View>
               </View>
-              <View style={styles.contextHintBadge}>
-                <Text style={styles.contextHintText}>{task.contextHint}</Text>
-              </View>
+              <Text style={styles.nowTitle}>Physical Therapy Appointment</Text>
+              <Text style={styles.nowMeta}>Due now - 02:00 PM | At clinic</Text>
             </View>
           </View>
-          <View style={styles.taskActionsRow}>
+          <View style={styles.nowActionsRow}>
             <View style={styles.halfActionButton}>
               <PrimaryButton
-                accessibilityLabel={`Mark ${task.title} as done`}
+                accessibilityLabel="Start task now"
                 onPress={handlePress}
-                title="Done"
+                title="Start"
               />
             </View>
             <TouchableOpacity
-              accessibilityLabel={`Reschedule ${task.title}`}
+              accessibilityLabel="Snooze task for 10 minutes"
               accessibilityRole="button"
               onPress={handlePress}
               style={styles.secondaryActionButton}
             >
-              <Text style={styles.secondaryActionButtonText}>Reschedule</Text>
+              <Text style={styles.secondaryActionButtonText}>
+                Snooze 10 min
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-      ))}
-    </ScrollView>
+
+        <View style={styles.tabsRow}>
+          {taskTabs.map((tabLabel) => {
+            const isSelected = tabLabel === "Upcoming";
+
+            return (
+              <TouchableOpacity
+                key={tabLabel}
+                accessibilityLabel={`Show ${tabLabel.toLowerCase()} tasks`}
+                accessibilityRole="button"
+                onPress={handlePress}
+                style={[
+                  styles.tabButton,
+                  isSelected && styles.tabButtonSelected,
+                ]}
+              >
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    styles.tabButtonText,
+                    isSelected && styles.tabButtonTextSelected,
+                  ]}
+                >
+                  {tabLabel}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {upcomingTasks.map((task) => (
+          <View key={task.id} style={styles.taskCard}>
+            <View style={styles.taskCardBody}>
+              <TouchableOpacity
+                accessibilityLabel={`Mark ${task.title} done`}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: false }}
+                onPress={handlePress}
+                style={styles.checkbox}
+              />
+              <View style={styles.taskDetails}>
+                <View style={styles.taskTitleRow}>
+                  <View style={styles.taskTypeBadge}>
+                    <Text style={styles.taskTypeBadgeText}>
+                      {task.shortType}
+                    </Text>
+                  </View>
+                  <Text style={styles.taskTitle}>{task.title}</Text>
+                </View>
+                <Text style={styles.taskSubtitle}>{task.subtitle}</Text>
+                <View style={styles.taskMetaRow}>
+                  <Text style={styles.taskMetaText}>Time {task.time}</Text>
+                  <Text style={styles.taskMetaText}>Date {task.date}</Text>
+                  <View style={styles.priorityBadge}>
+                    <Text style={styles.priorityBadgeText}>
+                      {task.priority}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.contextHintBadge}>
+                  <Text style={styles.contextHintText}>{task.contextHint}</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.taskActionsRow}>
+              <View style={styles.halfActionButton}>
+                <PrimaryButton
+                  accessibilityLabel={`Mark ${task.title} as done`}
+                  onPress={handlePress}
+                  title="Done"
+                />
+              </View>
+              <TouchableOpacity
+                accessibilityLabel={`Reschedule ${task.title}`}
+                accessibilityRole="button"
+                onPress={handlePress}
+                style={styles.secondaryActionButton}
+              >
+                <Text style={styles.secondaryActionButtonText}>Reschedule</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+
+      <View style={styles.nowBar}>
+        <View style={styles.nowBarLeft}>
+          <Feather color={colors.onPrimary} name="clock" size={14} />
+          <View style={styles.nowBarCopy}>
+            <Text numberOfLines={1} style={styles.nowBarTitle}>
+              Now: Physical Therapy Appointment
+            </Text>
+            <Text style={styles.nowBarMeta}>02:00 PM • At clinic</Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          accessibilityLabel="View appointment details"
+          accessibilityRole="button"
+          onPress={handlePress}
+          style={styles.nowBarAction}
+        >
+          <Text style={styles.nowBarActionText}>View</Text>
+          <Feather color={colors.onPrimary} name="chevron-right" size={16} />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
@@ -270,7 +308,7 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,
-    paddingBottom: spacing.xxl,
+    paddingBottom: 120,
     gap: spacing.xl,
   },
   summaryRow: {
@@ -588,5 +626,48 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.md,
     marginTop: spacing.xs,
+  },
+  nowBar: {
+    alignItems: "center",
+    backgroundColor: colors.primary,
+    borderTopColor: colors.navy,
+    borderTopWidth: 1,
+    bottom: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    left: 0,
+    minHeight: 56,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    position: "absolute",
+    right: 0,
+  },
+  nowBarLeft: {
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
+    marginRight: spacing.sm,
+  },
+  nowBarCopy: {
+    marginLeft: spacing.sm,
+  },
+  nowBarTitle: {
+    color: colors.onPrimary,
+    fontSize: fontSizes.md,
+    fontWeight: "700",
+  },
+  nowBarMeta: {
+    color: "#DCE8F5",
+    fontSize: fontSizes.sm,
+    marginTop: 2,
+  },
+  nowBarAction: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  nowBarActionText: {
+    color: colors.onPrimary,
+    fontSize: fontSizes.md,
+    fontWeight: "600",
   },
 });
