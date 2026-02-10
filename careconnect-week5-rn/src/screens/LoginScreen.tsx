@@ -129,7 +129,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
           testID="login-submit"
           title="Sign in"
         />
-        <Text style={styles.footerText}>Don't have an account? Sign up</Text>
+        <Text style={styles.footerText}>Don&apos;t have an account? Sign up</Text>
       </View>
     </ScrollView>
   );

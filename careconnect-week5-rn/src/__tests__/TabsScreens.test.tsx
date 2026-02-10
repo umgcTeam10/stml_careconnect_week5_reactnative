@@ -24,9 +24,19 @@ describe('Tab placeholder screens', () => {
     expect(getByText('Secure messaging will appear here.')).toBeTruthy();
   });
 
-  it('renders profile placeholder', () => {
-    const { getByText } = render(<ProfileScreen />);
-    expect(getByText('Profile (placeholder)')).toBeTruthy();
-    expect(getByText('Profile settings will live here.')).toBeTruthy();
-  });
+  it('renders profile screen settings', () => {
+  const { getByTestId } = render(<ProfileScreen {...({ navigation: {}, route: {} } as any)} />);
+
+  expect(getByTestId('toggle-push')).toBeTruthy();
+  expect(getByTestId('toggle-email')).toBeTruthy();
+  expect(getByTestId('toggle-reminders')).toBeTruthy();
+  expect(getByTestId('toggle-dark-mode')).toBeTruthy();
+
+  expect(getByTestId('settings-text-size')).toBeTruthy();
+  expect(getByTestId('settings-contrast')).toBeTruthy();
+  expect(getByTestId('settings-privacy')).toBeTruthy();
+  expect(getByTestId('settings-help')).toBeTruthy();
+
+  expect(getByTestId('profile-signout')).toBeTruthy();
+});
 });

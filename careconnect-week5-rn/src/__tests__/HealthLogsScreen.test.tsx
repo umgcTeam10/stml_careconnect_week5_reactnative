@@ -20,51 +20,48 @@ describe('HealthLogsScreen', () => {
   it('renders correctly', () => {
     const { getByText } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
 
-    expect(getByText('Health Logs')).toBeTruthy();
+    // Note: "Health Logs" is now in the tab navigator header, not in the component
+    expect(getByText('BP Today')).toBeTruthy();
   });
 
   it('renders all summary cards', () => {
-  const { getByText, getAllByText } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
+    const { getByText, getAllByText } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
 
-  expect(getByText('BP Today')).toBeTruthy();
-  expect(getByText('120/80')).toBeTruthy();
-  expect(getByText('mmHg')).toBeTruthy();
-  
-  expect(getByText('Medications')).toBeTruthy();
-  expect(getByText('2/2')).toBeTruthy();
-  expect(getByText('Completed')).toBeTruthy();
+    expect(getByText('BP Today')).toBeTruthy();
+    expect(getByText('120/80')).toBeTruthy();
+    expect(getByText('mmHg')).toBeTruthy();
+    
+    expect(getByText('Medications')).toBeTruthy();
+    expect(getByText('2/2')).toBeTruthy();
+    expect(getByText('Completed')).toBeTruthy();
 
-  // Meals and Mood appear in both summary cards and tabs
-  const mealsElements = getAllByText('Meals');
-  expect(mealsElements.length).toBeGreaterThanOrEqual(1);
-  expect(getByText('1,240')).toBeTruthy();
-  expect(getByText('Calories')).toBeTruthy();
-  
-  const moodElements = getAllByText('Mood');
-  expect(moodElements.length).toBeGreaterThanOrEqual(1);
-  // REMOVED: expect(getByText('Mood')).toBeTruthy(); ← This was the problem!
-  expect(getByText('Good')).toBeTruthy();
-  expect(getByText('Improving')).toBeTruthy();
-});
+    const mealsElements = getAllByText('Meals');
+    expect(mealsElements.length).toBeGreaterThanOrEqual(1);
+    expect(getByText('1,240')).toBeTruthy();
+    expect(getByText('Calories')).toBeTruthy();
+    
+    const moodElements = getAllByText('Mood');
+    expect(moodElements.length).toBeGreaterThanOrEqual(1);
+    expect(getByText('Good')).toBeTruthy();
+    expect(getByText('Improving')).toBeTruthy();
+  });
 
   it('renders all filter tabs', () => {
-  const { getByText, getAllByText } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
+    const { getByText, getAllByText } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
 
-  expect(getByText('All')).toBeTruthy();
-  expect(getByText('Vitals')).toBeTruthy();
-  expect(getByText('Meds')).toBeTruthy();
-  
-  // Meals and Mood appear in both summary cards and tabs
-  const mealsElements = getAllByText('Meals');
-  expect(mealsElements.length).toBeGreaterThanOrEqual(1);
-  
-  const moodElements = getAllByText('Mood');
-  expect(moodElements.length).toBeGreaterThanOrEqual(1);
-  // REMOVED: expect(getByText('Mood')).toBeTruthy(); ← This was the problem!
-  
-  expect(getByText('Symptoms')).toBeTruthy();
-  expect(getByText('Activity')).toBeTruthy();
-});
+    expect(getByText('All')).toBeTruthy();
+    expect(getByText('Vitals')).toBeTruthy();
+    expect(getByText('Meds')).toBeTruthy();
+    
+    const mealsElements = getAllByText('Meals');
+    expect(mealsElements.length).toBeGreaterThanOrEqual(1);
+    
+    const moodElements = getAllByText('Mood');
+    expect(moodElements.length).toBeGreaterThanOrEqual(1);
+    
+    expect(getByText('Symptoms')).toBeTruthy();
+    expect(getByText('Activity')).toBeTruthy();
+  });
 
   it('selects tab when pressed', () => {
     const { getByTestId } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
@@ -78,23 +75,18 @@ describe('HealthLogsScreen', () => {
   it('renders all 5 log entries', () => {
     const { getByText } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
 
-    // Entry 1: Blood Pressure
     expect(getByText('Blood Pressure')).toBeTruthy();
     expect(getByText('120/80 mmHg')).toBeTruthy();
     
-    // Entry 2: Mood Check
     expect(getByText('Mood Check')).toBeTruthy();
     expect(getByText('Feeling good today')).toBeTruthy();
     
-    // Entry 3: Medication Taken
     expect(getByText('Medication Taken')).toBeTruthy();
     expect(getByText('Morning medications completed')).toBeTruthy();
     
-    // Entry 4: Breakfast
     expect(getByText('Breakfast')).toBeTruthy();
     expect(getByText('Oatmeal with berries, green tea')).toBeTruthy();
     
-    // Entry 5: No symptoms reported
     expect(getByText('No symptoms reported')).toBeTruthy();
     expect(getByText('Feeling well, no concerns')).toBeTruthy();
   });
@@ -125,7 +117,6 @@ describe('HealthLogsScreen', () => {
     const logEntry = getByTestId('log-entry-1');
     fireEvent.press(logEntry);
 
-    // Details should be visible
     expect(getByText('systolic: 120')).toBeTruthy();
     expect(getByText('diastolic: 80')).toBeTruthy();
     expect(getByText('heartRate: 72')).toBeTruthy();
@@ -165,11 +156,9 @@ describe('HealthLogsScreen', () => {
 
     const logEntry = getByTestId('log-entry-1');
     
-    // Expand
     fireEvent.press(logEntry);
     expect(queryByText('systolic: 120')).toBeTruthy();
 
-    // Collapse
     fireEvent.press(logEntry);
     expect(queryByText('systolic: 120')).toBeFalsy();
   });
@@ -177,34 +166,14 @@ describe('HealthLogsScreen', () => {
   it('only expands one entry at a time', () => {
     const { getByTestId, queryByText } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
 
-    // Expand first entry
     const entry1 = getByTestId('log-entry-1');
     fireEvent.press(entry1);
     expect(queryByText('systolic: 120')).toBeTruthy();
 
-    // Expand second entry - first should collapse
     const entry2 = getByTestId('log-entry-2');
     fireEvent.press(entry2);
     expect(queryByText('systolic: 120')).toBeFalsy();
     expect(queryByText('mood: happy')).toBeTruthy();
-  });
-
-  it('navigates back when back button is pressed', () => {
-    const { getByTestId } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
-
-    const backButton = getByTestId('health-logs-back');
-    fireEvent.press(backButton);
-
-    expect(mockNavigation.goBack).toHaveBeenCalled();
-  });
-
-  it('shows not implemented alert when add button is pressed', () => {
-    const { getByTestId } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
-
-    const addButton = getByTestId('health-logs-add');
-    fireEvent.press(addButton);
-
-    expect(Alert.alert).toHaveBeenCalledWith('Not Implemented', 'This feature is not implemented in Week 5');
   });
 
   it('shows not implemented alert when FAB is pressed', () => {
@@ -237,8 +206,6 @@ describe('HealthLogsScreen', () => {
   it('has proper accessibility labels', () => {
     const { getByLabelText } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
 
-    expect(getByLabelText('Back button')).toBeTruthy();
-    expect(getByLabelText('Add new log')).toBeTruthy();
     expect(getByLabelText('Add new health log')).toBeTruthy();
     expect(getByLabelText('Blood Pressure log entry')).toBeTruthy();
     expect(getByLabelText('Mood Check log entry')).toBeTruthy();
@@ -252,8 +219,6 @@ describe('HealthLogsScreen', () => {
   it('has proper testIDs for all interactive elements', () => {
     const { getByTestId } = render(<HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />);
 
-    expect(getByTestId('health-logs-back')).toBeTruthy();
-    expect(getByTestId('health-logs-add')).toBeTruthy();
     expect(getByTestId('health-logs-scroll')).toBeTruthy();
     expect(getByTestId('tab-all')).toBeTruthy();
     expect(getByTestId('tab-vitals')).toBeTruthy();

@@ -1,12 +1,12 @@
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { RootStackParamList } from '@/src/navigation/RootNavigator';
+import type { HomeStackParamList } from '@/src/navigation/HomeStack';  // ← Changed
 import { colors, fontSizes, spacing } from '@/src/utils/theme';
 
-type HealthLogsScreenProps = NativeStackScreenProps<RootStackParamList, 'HealthLogs'>;
+type HealthLogsScreenProps = NativeStackScreenProps<HomeStackParamList, 'HealthLogs'>;
 
 type LogEntry = {
   id: number;
@@ -110,26 +110,12 @@ export function HealthLogsScreen({ navigation }: HealthLogsScreenProps) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          accessibilityLabel="Back button"
-          onPress={() => navigation.goBack()}
-          testID="health-logs-back"
-        >
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Health Logs</Text>
-        <TouchableOpacity
-          accessibilityLabel="Add new log"
-          onPress={showNotImplemented}
-          testID="health-logs-add"
-        >
-          <Text style={styles.newButton}>+ New</Text>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView style={styles.scrollView} testID="health-logs-scroll">
+    <View style={styles.container}>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        testID="health-logs-scroll"
+      >
         <View style={styles.summaryGrid}>
           <View style={styles.summaryRow}>
             <View style={styles.summaryCard}>
@@ -263,7 +249,7 @@ export function HealthLogsScreen({ navigation }: HealthLogsScreenProps) {
           <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -272,26 +258,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     flex: 1,
   },
-  header: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.lg,
-  },
-  headerTitle: {
-    color: '#FFFFFF',
-    fontSize: fontSizes.xl,
-    fontWeight: '700',
-  },
-  newButton: {
-    color: '#FFFFFF',
-    fontSize: fontSizes.md,
-    fontWeight: '600',
-  },
   scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 120,
   },
   summaryGrid: {
     paddingHorizontal: spacing.lg,
