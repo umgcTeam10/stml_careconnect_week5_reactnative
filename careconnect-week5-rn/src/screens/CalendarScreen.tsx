@@ -283,8 +283,6 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
 
         <View style={{ height: 24 }} />
       </ScrollView>
-
-      <CalendarBottomBar onTap={onNavTap} onNowTap={showNotImplemented} />
     </SafeAreaView>
   );
 }

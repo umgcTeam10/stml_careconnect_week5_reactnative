@@ -334,34 +334,6 @@ function BottomBar({
           <Text style={styles.nowViewText}> →</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.navBar}>
-        <NavItem
-          label="Home"
-          icon="⌂"
-          active={false}
-          onPress={() => onTap(0)}
-        />
-        <NavItem
-          label="Tasks"
-          icon="✓"
-          active={false}
-          onPress={() => onTap(1)}
-        />
-        <NavItem
-          label="Calendar"
-          icon="📅"
-          active={false}
-          onPress={() => onTap(2)}
-        />
-        <NavItem label="Messages" icon="💬" active onPress={() => onTap(3)} />
-        <NavItem
-          label="Profile"
-          icon="👤"
-          active={false}
-          onPress={() => onTap(4)}
-        />
-      </View>
     </View>
   );
 }
