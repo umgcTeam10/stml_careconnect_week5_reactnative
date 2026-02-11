@@ -5,7 +5,6 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMemo, useState } from "react";
 import {
-  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -83,33 +82,6 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
   const [selectedDate, setSelectedDate] = useState(() => new Date(2026, 0, 26)); // Jan 26 2026
 
   const eventDates = useMemo(() => [new Date(2026, 0, 27)], []);
-
-  const showNotImplemented = () => {
-    Alert.alert("Not implemented", "Not implemented in Week 4");
-  };
-
-  const onNavTap = (index: number) => {
-    // AppTabs screens: Home, Tasks, Calendar, Messages, Profile (update names if yours differ)
-    switch (index) {
-      case 0:
-        navigation.navigate("AppTabs", { screen: "Home" });
-        return;
-      case 1:
-        navigation.navigate("AppTabs", { screen: "Tasks" });
-        return;
-      case 2:
-        navigation.navigate("AppTabs", { screen: "Calendar" });
-        return;
-      case 3:
-        navigation.navigate("AppTabs", { screen: "Messages" });
-        return;
-      case 4:
-        navigation.navigate("AppTabs", { screen: "Profile" });
-        return;
-      default:
-        return;
-    }
-  };
 
   const changeMonth = (offset: number) => {
     const next = new Date(
@@ -236,7 +208,7 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
 
         <View style={{ height: 18 }} />
 
-        <Text style={styles.sectionTitle}>Today's Schedule</Text>
+        <Text style={styles.sectionTitle}>Today&apos;s Schedule</Text>
         <View style={{ height: 12 }} />
 
         <ScheduleCard
@@ -371,100 +343,6 @@ function TagChip({
     <View style={[styles.chip, { backgroundColor: background }]}>
       <Text style={[styles.chipText, { color: foreground }]}>{label}</Text>
     </View>
-  );
-}
-
-function CalendarBottomBar({
-  onTap,
-  onNowTap,
-}: {
-  onTap: (index: number) => void;
-  onNowTap: () => void;
-}) {
-  return (
-    <View>
-      <View style={styles.nowBar}>
-        <Text style={styles.nowIcon}>⏱</Text>
-        <View style={{ width: 8 }} />
-
-        <View style={{ flex: 1 }}>
-          <Text style={styles.nowTitle}>Now: Physical Therapy Appointment</Text>
-
-          <View style={styles.nowMetaRow}>
-            <Text style={styles.nowMetaText}>⏱</Text>
-            <Text style={styles.nowMetaText}>02:00 PM</Text>
-            <Text style={styles.nowMetaText}>•</Text>
-            <Text style={styles.nowMetaText}>🏥</Text>
-            <Text style={styles.nowMetaText}>At clinic</Text>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          accessibilityLabel="View current event"
-          onPress={onNowTap}
-          style={styles.viewBtn}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.viewBtnText}>View</Text>
-          <View style={{ width: 4 }} />
-          <Text style={styles.viewBtnText}>→</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.navBar}>
-        <NavItem
-          label="Home"
-          icon="⌂"
-          active={false}
-          onPress={() => onTap(0)}
-        />
-        <NavItem
-          label="Tasks"
-          icon="✓"
-          active={false}
-          onPress={() => onTap(1)}
-        />
-        <NavItem label="Calendar" icon="📅" active onPress={() => onTap(2)} />
-        <NavItem
-          label="Messages"
-          icon="💬"
-          active={false}
-          onPress={() => onTap(3)}
-        />
-        <NavItem
-          label="Profile"
-          icon="👤"
-          active={false}
-          onPress={() => onTap(4)}
-        />
-      </View>
-    </View>
-  );
-}
-
-function NavItem({
-  label,
-  icon,
-  active,
-  onPress,
-}: {
-  label: string;
-  icon: string;
-  active: boolean;
-  onPress: () => void;
-}) {
-  const color = active ? colors.primary : mutedText;
-
-  return (
-    <TouchableOpacity
-      accessibilityLabel={label}
-      onPress={onPress}
-      style={styles.navItem}
-      activeOpacity={0.8}
-    >
-      <Text style={[styles.navIcon, { color }]}>{icon}</Text>
-      <Text style={[styles.navLabel, { color }]}>{label}</Text>
-    </TouchableOpacity>
   );
 }
 

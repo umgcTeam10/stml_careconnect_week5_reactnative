@@ -338,32 +338,6 @@ function BottomBar({
   );
 }
 
-function NavItem({
-  label,
-  icon,
-  active,
-  onPress,
-}: {
-  label: string;
-  icon: string;
-  active: boolean;
-  onPress: () => void;
-}) {
-  const tint = active ? colors.primary : mutedText;
-
-  return (
-    <TouchableOpacity
-      accessibilityLabel={label}
-      onPress={onPress}
-      style={styles.navItem}
-      activeOpacity={0.85}
-    >
-      <Text style={[styles.navIcon, { color: tint }]}>{icon}</Text>
-      <Text style={[styles.navLabel, { color: tint }]}>{label}</Text>
-    </TouchableOpacity>
-  );
-}
-
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
