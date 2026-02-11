@@ -1,166 +1,201 @@
-# CareConnect (Week 5, React Native)
+# CareConnect (React Native) — Week 6: Accessibility & UI Testing
 
-Week 5 React Native implementation of CareConnect for SWEN 661. This repo rebuilds the Week 4 Flutter app in **React Native (Expo) with TypeScript**, using **Jest** and **React Native Testing Library** for testing and coverage.
+SWEN 661 — Week 6
+Team Scenario: **STML (Short-Term Memory Loss)**
+Scope: **Accessibility improvements + UI testing** for the React Native CareConnect app (built in Week 5).
 
-Repo: https://github.com/umgcTeam10/stml_careconnect_week5_reactnative
+## 1) Week 6 Requirements (React Native)
+
+This week we implemented **WCAG 2.1 Level AA** accessibility improvements and expanded **UI test coverage**.
+
+Minimum expectations implemented:
+
+* **Accessible labels** for images, icons, and interactive controls
+* **Color contrast** improvements (WCAG AA target)
+* **Logical focus / navigation order** across screens
+* **Screen reader compatibility** using:
+
+  * **TalkBack (Android)**
+  * **VoiceOver (iOS)**
+* **UI tests + coverage report generation**
+
+## 2) App Flow (Screen Order)
+
+Onboarding (before tabs):
+
+1. Welcome
+2. Role Selection
+3. Login
+
+Main App (bottom nav tabs):
+4. Home
+5. Tasks
+6. Calendar
+7. Health Logs
+8. Messages
+9. Profile
+
+Full order: **Welcome → Role → Login → Tabs**
+
+## 3) Accessibility Enhancements (What We Changed)
+
+Across all screens, we focused on:
+
+* Adding `accessibilityLabel`, `accessibilityRole`, and (where helpful) `accessibilityHint`
+* Avoiding unlabeled icon-only touch targets
+* Ensuring logical swipe/focus order
+* Improving contrast for buttons/text/selected states
+* STML alignment:
+
+  * Consistent screen titles and clear call-to-action labels
+  * Predictable navigation and minimized ambiguity
+
+## 4) How to Run (React Native)
+
+### Prerequisites
+
+* Node.js + npm (or yarn)
+* Android Studio / Xcode
+* React Native environment setup completed
+
+### Install & Run
+
+1. Install dependencies:
+
+   * `npm install`
+2. Start Metro:
+
+   * `npm start`
+3. Run on Android:
+
+   * `npm run android`
+4. Run on iOS:
+
+   * `npm run ios`
+
+## 5) Screen Reader Testing
+
+### Android (TalkBack)
+
+* Enable TalkBack:
+
+  * Settings → Accessibility → TalkBack → On
+* Test:
+
+  * Swipe to navigate focus
+  * Verify labels, roles, and order on each screen
+
+### iOS (VoiceOver)
+
+* Enable VoiceOver:
+
+  * Settings → Accessibility → VoiceOver → On
+* Test:
+
+  * Swipe to navigate focus
+  * Verify labels, roles, and announcements
+
+## 6) UI Testing + Coverage
+
+### Run Tests
+
+* `npm test`
+
+### Generate Coverage
+
+If Jest is configured:
+
+* `npm test -- --coverage`
+
+Coverage output should appear in:
+
+* `coverage/`
+
+## 7) Evidence (Required Artifacts)
+
+Week 6 proof artifacts are stored in:
+
+* `week6-evidence/react-native/`
+
+Expected files:
+
+* `talkback_onboarding.mp4`
+* `talkback_tabs.mp4`
+* `voiceover_onboarding.mp4`
+* `voiceover_tabs.mp4`
+* `screenshots/` (labels being read)
+* `coverage.txt` (final coverage % and command output)
+
+## 8) Week 6 Checklist (React Native)
+
+### Accessibility (WCAG 2.1 AA)
+
+* [ ] All buttons/icons/interactive controls include `accessibilityLabel`
+* [ ] All controls have appropriate `accessibilityRole` (button, tab, header, etc.)
+* [ ] Inputs have accessible labels (not placeholder-only)
+* [ ] Focus/swipe order is logical on **every screen**
+* [ ] Color contrast meets WCAG AA on key UI elements
+* [ ] No icon-only controls without labels
+* [ ] Screen titles are announced clearly
+
+### Screen Reader Validation
+
+* [ ] TalkBack tested on Android (Onboarding flow)
+* [ ] TalkBack tested on Android (All 6 tabs)
+* [ ] VoiceOver tested on iOS (Onboarding flow)
+* [ ] VoiceOver tested on iOS (All 6 tabs)
+* [ ] Screen reader evidence captured and saved in `week6-evidence/react-native/`
+
+### Testing & Coverage
+
+* [ ] UI tests added/updated for Week 6
+* [ ] `npm test` passes
+* [ ] Coverage generated (`npm test -- --coverage`)
+* [ ] Final coverage % recorded in `week6-evidence/react-native/coverage.txt`
+* [ ] Coverage meets target threshold (team target: **75%+**)
+
+### Submission Readiness
+
+* [ ] Evidence folder complete and organized
+* [ ] Changes summarized in Week 6 write-up (what + why + results)
+* [ ] App runs cleanly in emulator and can be demoed live
+
+## 9) Git Branching Rules (Week 6)
+
+We use a strict branching workflow:
+
+* `main` = protected / stable / final-ready only
+* `develop` = active integration branch (all Week 6 work merges here first)
+* Feature branches = created **only from `develop`**
+* Branch naming convention = `feature_<INITIALS>` (no additional text)
+
+### Create a New Feature Branch (Always from develop)
+
+1. Make sure you are on `develop` and up to date:
+
+* `git checkout develop`
+* `git pull origin develop`
+
+2. Create your feature branch using the required naming convention:
+
+* `git checkout -b feature_JR`
+
+3. Push your branch to GitHub:
+
+* `git push -u origin feature_JR`
+
+### Merging Rules
+
+* Open a Pull Request (PR) **into `develop`**
+* Only merge to `main` when:
+
+  * Week 6 work is complete
+  * Both apps meet requirements
+  * Tests pass and coverage reports are generated
+  * Evidence package is complete
+
+Main takes **final, develop-ready code only**.
 
 ---
 
-## Project Overview
-
-This React Native version implements the CareConnect UI screens based on the provided mockups, with a simple onboarding flow and a bottom tab navigation matching the mock:
-
-- Onboarding flow: Welcome → Role → Login  
-- Main tabs: Home, Tasks, Calendar, Messages, Profile  
-- Health Logs is treated as a secondary screen (not a tab)
-
-We are using mock data only, there is no backend for Week 5.
-
----
-
-## Prerequisites
-
-Install these before running the project:
-
-- Node.js (LTS recommended)
-- npm (comes with Node)
-- Git
-- Expo Go (optional, for running on a physical phone)
-  - iOS App Store or Google Play Store
-
-Optional but helpful:
-- Android Studio (Android emulator)
-- Xcode (iOS simulator, macOS only)
-
----
-
-## Getting Started
-
-1) Clone the repo
-
-git clone https://github.com/umgcTeam10/stml_careconnect_week5_reactnative.git
-cd stml_careconnect_week5_reactnative/careconnect-week5-rn
-
-2) Install dependencies
-npm install
-
-3) Run the app
-
-Start Expo:
-
-npm start
-
-
-Then choose one of the following:
-
-Run on Web: press w in the terminal
-
-Run on Android emulator: press a
-
-Run on iOS simulator (macOS only): press i
-
-Run on your phone:
-
-open Expo Go
-
-scan the QR code shown by Expo
-
-Testing
-Run all tests
-npm test
-
-Run coverage report
-npm test -- --coverage
-
-
-Coverage output is generated in the coverage/ folder. If you want to view the HTML report:
-
-Open coverage/lcov-report/index.html in a browser
-
-Git Workflow and Branching Rules
-
-We use two long-lived branches:
-
-main is the source of truth
-
-no feature work should be done directly on main
-
-develop is the active integration branch
-
-all feature branches start from develop
-
-completed work is merged back into develop
-
-Create a new feature branch (always from develop)
-git checkout develop
-git pull
-git checkout -b feature/short-description
-
-
-Examples:
-
-feature/tasks-screen
-
-feature/calendar-ui
-
-feature/messages-screen
-
-Keep your branch up to date
-git checkout develop
-git pull
-git checkout feature/short-description
-git merge develop
-
-Push your branch
-git push -u origin feature/short-description
-
-
-Then open a Pull Request into develop.
-
-Expectations for Contributions
-
-If you own a screen, you also own the tests for that screen.
-
-A good contribution typically includes:
-
-screen UI implementation that matches the mock
-
-testIDs and accessibility labels for key elements
-
-basic tests for render and key interactions
-
-all tests passing (npm test)
-
-coverage maintained (npm test -- --coverage)
-
-Common Commands
-
-From careconnect-week5-rn/:
-
-Install: npm install
-
-Run: npm start
-
-Tests: npm test
-
-Coverage: npm test -- --coverage
-
-Troubleshooting
-Expo says it cannot start, or Metro bundler errors
-
-Try clearing and restarting:
-
-npx expo start -c
-
-Tests fail due to cached Jest output
-
-Try:
-
-npx jest --clearCache
-npm test
-
-Team Coordination
-
-Weekly timeline: Wednesday through Tuesday (11:59 PM).
-We will coordinate screen ownership and progress updates during our team meeting.
-
+Maintained by: Team CareConnect (STML Variant) — SWEN 661
