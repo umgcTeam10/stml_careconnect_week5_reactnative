@@ -2,7 +2,6 @@ import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { TextField } from '@/src/components/TextField';
@@ -16,7 +15,6 @@ type LoginScreenProps = CompositeScreenProps<
 >;
 
 export function LoginScreen({ navigation }: LoginScreenProps) {
-  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -40,13 +38,8 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
     navigation.navigate('AppTabs', { screen: 'Home' });
   };
 
-  const containerStyle = [
-    styles.container,
-    { paddingTop: Math.max(insets.top, spacing.lg) },
-  ];
-
   return (
-    <ScrollView contentContainerStyle={containerStyle} showsVerticalScrollIndicator={false}>
+    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       <TouchableOpacity
         accessibilityLabel="Back"
         onPress={() => navigation.navigate('Welcome')}
@@ -136,7 +129,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
           testID="login-submit"
           title="Sign in"
         />
-        <Text style={styles.footerText}>{'Don\'t have an account? Sign up'}</Text>
+        <Text style={styles.footerText}>Don&apos;t have an account? Sign up</Text>
       </View>
     </ScrollView>
   );
