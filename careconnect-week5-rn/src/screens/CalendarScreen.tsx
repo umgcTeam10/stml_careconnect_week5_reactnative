@@ -4,7 +4,6 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMemo, useState } from "react";
 import {
-  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,6 +12,7 @@ import {
   View,
 } from "react-native";
 
+// eslint-disable-next-line import/no-unresolved
 import { Calendar } from "react-native-calendars";
 
 import { AppTabParamList } from "@/src/navigation/AppTabs"; // ✅ adjust path/name if yours differs
@@ -24,7 +24,6 @@ type CalendarScreenProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList>
 >;
 
-const headerColor = "#0F4C81";
 const cardBorder = "#E3E8F1";
 const mutedText = "#5F6775";
 const chipRed = "#FDECEC";
@@ -73,33 +72,6 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
   const [selectedDate, setSelectedDate] = useState(() => new Date(2026, 0, 26)); // Jan 26 2026
 
   const eventDates = useMemo(() => [new Date(2026, 0, 27)], []);
-
-  const showNotImplemented = () => {
-    Alert.alert("Not implemented", "Not implemented in Week 4");
-  };
-
-  const onNavTap = (index: number) => {
-    // AppTabs screens: Home, Tasks, Calendar, Messages, Profile (update names if yours differ)
-    switch (index) {
-      case 0:
-        navigation.navigate("AppTabs", { screen: "Home" });
-        return;
-      case 1:
-        navigation.navigate("AppTabs", { screen: "Tasks" });
-        return;
-      case 2:
-        navigation.navigate("AppTabs", { screen: "Calendar" });
-        return;
-      case 3:
-        navigation.navigate("AppTabs", { screen: "Messages" });
-        return;
-      case 4:
-        navigation.navigate("AppTabs", { screen: "Profile" });
-        return;
-      default:
-        return;
-    }
-  };
 
   const changeMonth = (offset: number) => {
     const next = new Date(
@@ -211,7 +183,7 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
 
         <View style={{ height: 18 }} />
 
-        <Text style={styles.sectionTitle}>Today's Schedule</Text>
+        <Text style={styles.sectionTitle}>Today&apos;s Schedule</Text>
         <View style={{ height: 12 }} />
 
         <ScheduleCard
@@ -255,10 +227,6 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
           tagBackground="#F1F5F9"
           tagForeground="#334155"
         />
-
-        {/* If you need the bottom bar later, render it here:
-            <CalendarBottomBar onTap={onNavTap} onNowTap={showNotImplemented} />
-        */}
 
         <View style={{ height: 24 }} />
       </ScrollView>
