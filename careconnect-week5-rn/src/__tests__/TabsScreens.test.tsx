@@ -2,32 +2,19 @@ import { render } from "@testing-library/react-native";
 
 import { CalendarScreen } from "@/src/screens/CalendarScreen";
 import { MessagesScreen } from "@/src/screens/MessagesScreen";
-import { ProfileScreen } from "@/src/screens/ProfileScreen";
-import { TasksScreen } from "@/src/screens/TasksScreen";
 
-describe("Tab placeholder screens", () => {
-  it("renders tasks content", () => {
-    const { getByText } = render(<TasksScreen />);
-    expect(getByText("You have 2 overdue tasks")).toBeTruthy();
-    expect(getByText("Physical Therapy Appointment")).toBeTruthy();
-    expect(getByText("Blood Pressure Check")).toBeTruthy();
-  });
-
-  it("renders calendar placeholder", () => {
+describe("Tab screens", () => {
+  it("renders calendar screen content", () => {
     const { getByText } = render(<CalendarScreen />);
-    expect(getByText("Calendar (placeholder)")).toBeTruthy();
-    expect(getByText("Upcoming appointments will show here.")).toBeTruthy();
+    expect(getByText("Calendar")).toBeTruthy();
+    expect(getByText("January 2026")).toBeTruthy();
+    expect(getByText("Today's Schedule")).toBeTruthy();
   });
 
-  it("renders messages placeholder", () => {
+  it("renders messages screen content", () => {
     const { getByText } = render(<MessagesScreen />);
-    expect(getByText("Messages (placeholder)")).toBeTruthy();
-    expect(getByText("Secure messaging will appear here.")).toBeTruthy();
-  });
-
-  it("renders profile placeholder", () => {
-    const { getByText } = render(<ProfileScreen />);
-    expect(getByText("Profile (placeholder)")).toBeTruthy();
-    expect(getByText("Profile settings will live here.")).toBeTruthy();
+    expect(getByText("Messages")).toBeTruthy();
+    expect(getByText("Quick Contact")).toBeTruthy();
+    expect(getByText("Recent Messages")).toBeTruthy();
   });
 });
