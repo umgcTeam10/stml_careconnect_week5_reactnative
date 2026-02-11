@@ -1,4 +1,5 @@
 // CalendarScreen.tsx
+// CalendarScreen.tsx
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -12,9 +13,6 @@ import {
   View,
 } from "react-native";
 
-// eslint-disable-next-line import/no-unresolved
-import { Calendar } from "react-native-calendars";
-
 import { AppTabParamList } from "@/src/navigation/AppTabs"; // ✅ adjust path/name if yours differs
 import { RootStackParamList } from "@/src/navigation/RootNavigator";
 import { colors, fontSizes, spacing } from "@/src/utils/theme";
@@ -24,6 +22,7 @@ type CalendarScreenProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList>
 >;
 
+const headerColor = "#0F4C81";
 const cardBorder = "#E3E8F1";
 const mutedText = "#5F6775";
 const chipRed = "#FDECEC";
@@ -32,6 +31,25 @@ const chipBlue = "#E6F0FF";
 const chipBlueText = "#2F5DA8";
 const chipTeal = "#0E7C9A";
 const calendarSelected = "#0F4C81";
+
+type CalendarDay = {
+  key: string;
+  day: number | null;
+  date: Date | null;
+  selected: boolean;
+  highlight: boolean;
+  showDot: boolean;
+};
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function isSameDay(a: Date, b: Date) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
 
 function daysInMonth(year: number, monthIndex0: number) {
   return new Date(year, monthIndex0 + 1, 0).getDate();
@@ -59,14 +77,6 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-// YYYY-MM-DD for react-native-calendars
-function toISODateKey(d: Date) {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
-}
-
 export function CalendarScreen({ navigation }: CalendarScreenProps) {
   const [focusedMonth, setFocusedMonth] = useState(() => new Date(2026, 0, 1)); // Jan 2026
   const [selectedDate, setSelectedDate] = useState(() => new Date(2026, 0, 26)); // Jan 26 2026
@@ -87,26 +97,47 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
     setSelectedDate(new Date(next.getFullYear(), next.getMonth(), safeDay));
   };
 
-  const markedDates = useMemo(() => {
-    const marks: Record<string, any> = {};
+  const calendarDays: CalendarDay[] = useMemo(() => {
+    const year = focusedMonth.getFullYear();
+    const month = focusedMonth.getMonth(); // 0-11
 
-    // event dots
-    for (const d of eventDates) {
-      const key = toISODateKey(d);
-      marks[key] = { ...(marks[key] ?? {}), marked: true, dotColor: chipTeal };
-    }
+    const firstDay = new Date(year, month, 1);
+    const leading = firstDay.getDay(); // 0=Sun ... 6=Sat
+    const dim = daysInMonth(year, month);
 
-    // selected day
-    const selectedKey = toISODateKey(selectedDate);
-    marks[selectedKey] = {
-      ...(marks[selectedKey] ?? {}),
-      selected: true,
-      selectedColor: calendarSelected,
-      selectedTextColor: "#FFFFFF",
-    };
+    const totalCells = leading + dim;
+    const trailing = (7 - (totalCells % 7)) % 7;
+    const gridCount = totalCells + trailing;
 
-    return marks;
-  }, [eventDates, selectedDate]);
+    return Array.from({ length: gridCount }, (_, index) => {
+      const inRange = index >= leading && index < leading + dim;
+      if (!inRange) {
+        return {
+          key: `empty-${index}`,
+          day: null,
+          date: null,
+          selected: false,
+          highlight: false,
+          showDot: false,
+        };
+      }
+
+      const day = index - leading + 1;
+      const date = new Date(year, month, day);
+
+      const selected = isSameDay(date, selectedDate);
+      const hasEvent = eventDates.some((d) => isSameDay(d, date));
+
+      return {
+        key: `${year}-${month}-${day}`,
+        day,
+        date,
+        selected,
+        highlight: hasEvent && !selected,
+        showDot: hasEvent && !selected,
+      };
+    });
+  }, [focusedMonth, selectedDate, eventDates]);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -152,33 +183,27 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
         <View style={{ height: 16 }} />
 
         <View style={styles.calendarCard}>
-          <Calendar
-            current={toISODateKey(focusedMonth)}
-            markedDates={markedDates}
-            markingType="dot"
-            hideArrows={true} // you already have your own month bar
-            renderHeader={() => null} // hide built-in month label
-            onDayPress={(day) => {
-              const [y, m, d] = day.dateString.split("-").map(Number);
-              setSelectedDate(new Date(y, m - 1, d));
-            }}
-            onMonthChange={(m) => {
-              // keeps your month label synced when user swipes
-              setFocusedMonth(new Date(m.year, m.month - 1, 1));
-            }}
-            theme={{
-              backgroundColor: "transparent",
-              calendarBackground: "transparent",
-              textSectionTitleColor: mutedText,
-              dayTextColor: mutedText,
-              todayTextColor: chipTeal,
-              textDayFontWeight: "600",
-              textDayHeaderFontWeight: "600",
-              textDayFontSize: 14,
-              textDayHeaderFontSize: 12,
-            }}
-            style={{ paddingBottom: 4 }}
-          />
+          <View style={styles.weekRow}>
+            {WEEKDAYS.map((d) => (
+              <View key={d} style={styles.weekCell}>
+                <Text style={styles.weekText}>{d}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={{ height: 16 }} />
+
+          <View style={styles.grid}>
+            {calendarDays.map((d) => (
+              <CalendarCell
+                key={d.key}
+                day={d}
+                onSelected={() => {
+                  if (d.date) setSelectedDate(d.date);
+                }}
+              />
+            ))}
+          </View>
         </View>
 
         <View style={{ height: 18 }} />
@@ -231,6 +256,39 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
         <View style={{ height: 24 }} />
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function CalendarCell({
+  day,
+  onSelected,
+}: {
+  day: CalendarDay;
+  onSelected: () => void;
+}) {
+  if (day.day == null) return <View style={styles.cellEmpty} />;
+
+  const background = day.selected
+    ? calendarSelected
+    : day.highlight
+      ? chipTeal
+      : "transparent";
+  const textColor = day.selected || day.highlight ? "#FFFFFF" : mutedText;
+
+  return (
+    <TouchableOpacity
+      accessibilityLabel={
+        day.date ? `Select ${day.date.toDateString()}` : "Empty day"
+      }
+      onPress={onSelected}
+      style={styles.cell}
+      activeOpacity={0.8}
+    >
+      <View style={[styles.cellInner, { backgroundColor: background }]}>
+        <Text style={[styles.cellText, { color: textColor }]}>{day.day}</Text>
+        {day.showDot ? <View style={styles.dot} /> : null}
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -348,6 +406,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: spacing.lg,
   },
+  weekRow: { flexDirection: "row", justifyContent: "space-between" },
+  weekCell: { width: 32, alignItems: "center" },
+  weekText: { color: mutedText, fontSize: 12, fontWeight: "600" },
+
+  grid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+  cellEmpty: { width: 32, height: 32 },
+  cell: { width: 32, height: 32 },
+  cellInner: {
+    flex: 1,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cellText: { fontSize: 14, fontWeight: "600" },
+  dot: {
+    position: "absolute",
+    bottom: 8,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#FFFFFF",
+  },
 
   sectionTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: "700" },
 
@@ -378,4 +458,44 @@ const styles = StyleSheet.create({
   scheduleTime: { color: mutedText, fontSize: 13 },
   chip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
   chipText: { fontSize: 11, fontWeight: "600" },
+
+  nowBar: {
+    backgroundColor: headerColor,
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  nowIcon: { color: "rgba(255,255,255,0.7)", fontSize: 16 },
+  nowTitle: { color: "#FFFFFF", fontSize: 12, fontWeight: "600" },
+  nowMetaRow: {
+    marginTop: 4,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  nowMetaText: { color: "rgba(255,255,255,0.7)", fontSize: 11 },
+  viewBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 8,
+  },
+  viewBtnText: { color: "#FFFFFF", fontSize: 12, fontWeight: "600" },
+
+  navBar: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingTop: 8,
+    paddingBottom: 10,
+    backgroundColor: colors.cardBackground,
+  },
+  navItem: { alignItems: "center", justifyContent: "center", minWidth: 60 },
+  navIcon: { fontSize: 18, fontWeight: "700" },
+  navLabel: { marginTop: 2, fontSize: 11, fontWeight: "600" },
 });
