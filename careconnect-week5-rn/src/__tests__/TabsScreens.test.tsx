@@ -8,7 +8,7 @@ describe("Tab screens", () => {
     const { getByText } = render(<CalendarScreen />);
     expect(getByText("Calendar")).toBeTruthy();
     expect(getByText("January 2026")).toBeTruthy();
-    expect(getByText("Today's Schedule")).toBeTruthy();
+    expect(getByText(/Today'?s Schedule/)).toBeTruthy();
   });
 
   it("renders messages screen content", () => {

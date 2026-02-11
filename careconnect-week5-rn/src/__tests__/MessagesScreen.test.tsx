@@ -3,9 +3,12 @@ import { Alert } from 'react-native';
 
 import { MessagesScreen } from '@/src/screens/MessagesScreen';
 
-const makeNavigation = () => ({
-  goBack: jest.fn(),
-  navigate: jest.fn(),
+const makeProps = () => ({
+  navigation: {
+    goBack: jest.fn(),
+    navigate: jest.fn(),
+  },
+  route: { key: 'messages', name: 'Messages', params: {} },
 });
 
 describe('MessagesScreen', () => {
@@ -19,7 +22,7 @@ describe('MessagesScreen', () => {
 
   it('renders primary messaging content', () => {
     const { getByPlaceholderText, getByText } = render(
-      <MessagesScreen navigation={makeNavigation() as any} />
+      <MessagesScreen {...(makeProps() as any)} />
     );
 
     expect(getByText('Messages')).toBeTruthy();
@@ -35,18 +38,18 @@ describe('MessagesScreen', () => {
   });
 
   it('navigates back when pressing Back', () => {
-    const navigation = makeNavigation();
+    const props = makeProps();
     const { getByLabelText } = render(
-      <MessagesScreen navigation={navigation as any} />
+      <MessagesScreen {...(props as any)} />
     );
 
     fireEvent.press(getByLabelText('Back'));
-    expect(navigation.goBack).toHaveBeenCalledTimes(1);
+    expect(props.navigation.goBack).toHaveBeenCalledTimes(1);
   });
 
   it('shows not implemented alert for interactive actions', () => {
     const { getByLabelText, getByTestId } = render(
-      <MessagesScreen navigation={makeNavigation() as any} />
+      <MessagesScreen {...(makeProps() as any)} />
     );
 
     fireEvent.press(getByLabelText('Emergency SOS'));

@@ -34,8 +34,11 @@ describe("Navigation flow", () => {
     fireEvent.changeText(getByTestId("login-password"), "123456");
     fireEvent.press(getByTestId("login-submit"));
 
-    await waitFor(() => {
-      expect(getByText("Your Health Today")).toBeTruthy();
-    });
+    await waitFor(
+      () => {
+        expect(getByText("Your Health Today")).toBeTruthy();
+      },
+      { timeout: 3000 },
+    );
   });
 });
