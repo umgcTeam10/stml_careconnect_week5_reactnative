@@ -1,5 +1,7 @@
+import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { AuthStackParamList } from '@/src/navigation/AuthStack';
@@ -8,8 +10,14 @@ import { colors, fontSizes, spacing } from '@/src/utils/theme';
 type WelcomeScreenProps = NativeStackScreenProps<AuthStackParamList, 'Welcome'>;
 
 export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
+  const insets = useSafeAreaInsets();
+  const containerStyle = [
+    styles.container,
+    { paddingTop: Math.max(insets.top, spacing.lg) },
+  ];
+
   return (
-    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView contentContainerStyle={containerStyle} showsVerticalScrollIndicator={false}>
       <View style={styles.loginRow}>
         <TouchableOpacity
           accessibilityLabel="Log in"

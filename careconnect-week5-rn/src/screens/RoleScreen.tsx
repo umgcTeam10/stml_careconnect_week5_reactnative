@@ -48,7 +48,7 @@ export function RoleScreen({ navigation }: RoleScreenProps) {
           testID="role-caregiver"
         >
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>I'm a Caregiver</Text>
+            <Text style={styles.cardTitle}>{'I\'m a Caregiver'}</Text>
             {role === 'caregiver' ? <Text style={styles.selectedBadge}>Selected</Text> : null}
           </View>
           <Text style={styles.cardSubtitle}>Caring for a loved one or patient</Text>
@@ -66,7 +66,7 @@ export function RoleScreen({ navigation }: RoleScreenProps) {
           testID="role-care-recipient"
         >
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>I'm a Care Recipient</Text>
+            <Text style={styles.cardTitle}>{'I\'m a Care Recipient'}</Text>
             {role === 'careRecipient' ? <Text style={styles.selectedBadge}>Selected</Text> : null}
           </View>
           <Text style={styles.cardSubtitle}>Receiving care and support</Text>
