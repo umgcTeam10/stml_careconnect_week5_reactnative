@@ -1,8 +1,10 @@
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import { AppTabParamList } from '@/src/navigation/AppTabs';
@@ -15,6 +17,7 @@ type ProfileScreenProps = CompositeScreenProps<
 >;
 
 export function ProfileScreen({ navigation }: ProfileScreenProps) {
+  const insets = useSafeAreaInsets();
   const [pushNotifications, setPushNotifications] = useState(true);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [taskReminders, setTaskReminders] = useState(true);
@@ -24,13 +27,35 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
     Alert.alert('Not Implemented', 'This feature is not implemented in Week 5');
   };
 
+  const titleRowStyle = [
+    styles.titleRow,
+    { paddingTop: insets.top + spacing.sm },
+  ];
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.safe} testID="profile-screen">
+      <StatusBar style="dark" />
+      {/* Tier 1: white area (status bar + page title row) - matches Messages tab header */}
+      <View style={titleRowStyle}>
+        <Text style={styles.titleRowText} numberOfLines={1}>
+          Profile
+        </Text>
+      </View>
+      {/* Tier 2: blue bar - back + title + Settings (matches Messages blue bar) */}
       <View style={styles.header}>
+        <TouchableOpacity
+          accessibilityLabel="Back"
+          onPress={() => navigation.goBack()}
+          style={styles.headerBack}
+          testID="headerBackButton"
+        >
+          <Text style={styles.headerBackText}>←</Text>
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
         <TouchableOpacity
           accessibilityLabel="Settings button"
           onPress={showNotImplemented}
+          style={styles.settingsButtonWrap}
           testID="profile-settings-button"
         >
           <Text style={styles.settingsButton}>Settings</Text>
@@ -258,31 +283,57 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
           <Ionicons name="arrow-forward" size={14} color={colors.onPrimary} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-  
-    backgroundColor: colors.background,
+  safe: {
     flex: 1,
+    backgroundColor: colors.background,
+  },
+  titleRow: {
+    backgroundColor: colors.background,
+    paddingHorizontal: spacing.xl,
+    paddingBottom: spacing.md,
+    minHeight: 44,
+    justifyContent: 'center',
+  },
+  titleRowText: {
+    color: colors.textPrimary,
+    fontSize: 18,
+    fontWeight: '600',
   },
   header: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    backgroundColor: colors.background,
     paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.lg,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
   },
-  headerTitle: {
-    color: colors.onPrimary,
-    fontSize: fontSizes.xl,
+  headerBack: {
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+  },
+  headerBackText: {
+    color: colors.textPrimary,
+    fontSize: 18,
     fontWeight: '700',
   },
+  headerTitle: {
+    color: colors.textPrimary,
+    flex: 1,
+    fontSize: 24,
+    fontWeight: '700',
+  },
+  settingsButtonWrap: {
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+  },
   settingsButton: {
-    color: colors.onPrimary,
+    color: colors.textPrimary,
     fontSize: fontSizes.md,
     fontWeight: '600',
   },
@@ -291,8 +342,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 20,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xl,
   },
   card: {
     backgroundColor: colors.surface,

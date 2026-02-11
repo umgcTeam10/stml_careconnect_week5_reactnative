@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    backgroundColor: headerColor,
+    backgroundColor: colors.background,
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.sm,
     paddingBottom: spacing.lg,
@@ -358,12 +358,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   headerBackText: {
-    color: colors.onPrimary,
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: "700",
   },
   headerTitle: {
-    color: colors.onPrimary,
+    color: colors.textPrimary,
     fontSize: 24,
     fontWeight: "700",
   },
