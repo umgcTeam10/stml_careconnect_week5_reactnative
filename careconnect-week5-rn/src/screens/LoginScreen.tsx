@@ -1,48 +1,58 @@
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { CompositeScreenProps } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useState } from "react";
 
-import { PrimaryButton } from '@/src/components/PrimaryButton';
-import { TextField } from '@/src/components/TextField';
-import { AuthStackParamList } from '@/src/navigation/AuthStack';
-import { RootStackParamList } from '@/src/navigation/RootNavigator';
-import { colors, fontSizes, spacing } from '@/src/utils/theme';
+import { PrimaryButton } from "@/src/components/PrimaryButton";
+import { TextField } from "@/src/components/TextField";
+import { AuthStackParamList } from "@/src/navigation/AuthStack";
+import { RootStackParamList } from "@/src/navigation/RootNavigator";
+import { colors, fontSizes, spacing } from "@/src/utils/theme";
 
 type LoginScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<AuthStackParamList, 'Login'>,
+  NativeStackScreenProps<AuthStackParamList, "Login">,
   NativeStackScreenProps<RootStackParamList>
 >;
 
 export function LoginScreen({ navigation }: LoginScreenProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = () => {
-    const emailValid = email.includes('@');
+    const emailValid = email.includes("@");
     const passwordValid = password.length >= 6;
 
     if (!emailValid) {
-      setError('Please enter a valid email.');
+      setError("Please enter a valid email.");
       return;
     }
 
     if (!passwordValid) {
-      setError('Password must be at least 6 characters.');
+      setError("Password must be at least 6 characters.");
       return;
     }
 
-    setError('');
-    navigation.navigate('AppTabs', { screen: 'Home' });
+    setError("");
+    navigation.navigate("AppTabs", { screen: "Home" });
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       <TouchableOpacity
         accessibilityLabel="Back"
-        onPress={() => navigation.navigate('Welcome')}
+        onPress={() => navigation.navigate("Welcome")}
         style={styles.backButton}
       >
         <Text style={styles.backText}>Back</Text>
@@ -81,7 +91,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
           onChangeText={(text) => {
             setEmail(text);
             if (error) {
-              setError('');
+              setError("");
             }
           }}
           placeholder="you@example.com"
@@ -94,7 +104,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
           onChangeText={(text) => {
             setPassword(text);
             if (error) {
-              setError('');
+              setError("");
             }
           }}
           placeholder="Enter your password"
@@ -117,7 +127,12 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
           </View>
           <TouchableOpacity
             accessibilityLabel="Forgot password"
-            onPress={() => Alert.alert('Reset password', 'We will help you reset your password soon.')}
+            onPress={() =>
+              Alert.alert(
+                "Reset password",
+                "We will help you reset your password soon.",
+              )
+            }
             testID="login-forgot"
           >
             <Text style={styles.forgotText}>Forgot password?</Text>
@@ -129,7 +144,9 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
           testID="login-submit"
           title="Sign in"
         />
-        <Text style={styles.footerText}>Don't have an account? Sign up</Text>
+        <Text style={styles.footerText}>
+          Don&apos;t have an account? Sign up
+        </Text>
       </View>
     </ScrollView>
   );
@@ -144,15 +161,15 @@ const styles = StyleSheet.create({
     gap: spacing.lg,
   },
   backButton: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   backText: {
     color: colors.textSecondary,
     fontSize: fontSizes.sm,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     gap: spacing.sm,
   },
   logoCircle: {
@@ -160,31 +177,31 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 32,
     backgroundColor: colors.navy,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   logoText: {
     color: colors.onPrimary,
     fontSize: fontSizes.lg,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   title: {
     color: colors.textPrimary,
     fontSize: 28,
-    fontWeight: '700',
-    textAlign: 'center',
+    fontWeight: "700",
+    textAlign: "center",
   },
   subtitle: {
     color: colors.textSecondary,
     fontSize: fontSizes.sm,
-    textAlign: 'center',
+    textAlign: "center",
   },
   altOptions: {
     gap: spacing.sm,
   },
   optionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.md,
     backgroundColor: colors.cardBackground,
     borderRadius: 12,
@@ -200,21 +217,21 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderColor: colors.border,
     borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   optionIconText: {
     color: colors.navy,
     fontSize: fontSizes.sm,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   optionText: {
     color: colors.textPrimary,
     fontSize: fontSizes.md,
   },
   divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.sm,
   },
   dividerLine: {
@@ -225,7 +242,7 @@ const styles = StyleSheet.create({
   dividerText: {
     color: colors.textSecondary,
     fontSize: fontSizes.xs,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   form: {
     gap: spacing.lg,
@@ -235,13 +252,13 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.sm,
   },
   rememberRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   rememberLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.sm,
   },
   checkbox: {
@@ -251,8 +268,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.cardBackground,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   checkboxSelected: {
     borderColor: colors.navy,
@@ -270,11 +287,11 @@ const styles = StyleSheet.create({
   forgotText: {
     color: colors.navy,
     fontSize: fontSizes.sm,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   footerText: {
     color: colors.textSecondary,
     fontSize: fontSizes.sm,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
