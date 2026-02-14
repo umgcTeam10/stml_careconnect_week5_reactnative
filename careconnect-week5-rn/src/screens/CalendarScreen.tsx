@@ -4,6 +4,7 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMemo, useState } from "react";
 import {
+    Platform,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -108,10 +109,16 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
   }, [eventDates, selectedDate]);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView
+      onAccessibilityEscape={() => navigation.goBack()}
+      style={styles.safe}
+    >
       <View style={styles.headerRow}>
         <TouchableOpacity
+          accessible={true}
           accessibilityLabel="Back"
+          accessibilityRole="button"
+          accessibilityHint="Navigates to the previous screen"
           onPress={() => navigation.goBack()}
           style={styles.backBtn}
         >
@@ -123,12 +130,16 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
       <View style={styles.divider} />
 
       <ScrollView
+        accessible={false}
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.monthBar}>
           <TouchableOpacity
+            accessible={true}
             accessibilityLabel="Previous month"
+            accessibilityRole="button"
+            accessibilityHint="Moves the calendar back by one month"
             onPress={() => changeMonth(-1)}
             style={styles.monthBtn}
           >
@@ -136,11 +147,21 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
           </TouchableOpacity>
 
           <View style={styles.monthLabelWrap}>
-            <Text style={styles.monthLabel}>{monthLabel(focusedMonth)}</Text>
+            <Text
+              accessibilityLiveRegion={
+                Platform.OS === "android" ? "polite" : "none"
+              }
+              style={styles.monthLabel}
+            >
+              {monthLabel(focusedMonth)}
+            </Text>
           </View>
 
           <TouchableOpacity
+            accessible={true}
             accessibilityLabel="Next month"
+            accessibilityRole="button"
+            accessibilityHint="Moves the calendar forward by one month"
             onPress={() => changeMonth(1)}
             style={styles.monthBtn}
           >
@@ -152,6 +173,9 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
 
         <View style={styles.calendarCard}>
           <Calendar
+            key={toISODateKey(focusedMonth)}
+            accessibilityLabel="Calendar dates"
+            accessibilityHint="Swipe left or right to move between months and select a date"
             current={toISODateKey(focusedMonth)}
             markedDates={markedDates}
             markingType="dot"
@@ -160,6 +184,7 @@ export function CalendarScreen({ navigation }: CalendarScreenProps) {
             onDayPress={(day) => {
               const [y, m, d] = day.dateString.split("-").map(Number);
               setSelectedDate(new Date(y, m - 1, d));
+              setFocusedMonth(new Date(y, m - 1, 1));
             }}
             onMonthChange={(m) => {
               // keeps your month label synced when user swipes
@@ -253,7 +278,12 @@ function ScheduleCard({
   tagForeground: string;
 }) {
   return (
-    <View style={styles.scheduleCard}>
+    <View
+      accessible={true}
+      accessibilityLabel={`${title.replace("\n", " ")}, ${time}, ${tagLabel} priority`}
+      accessibilityRole="summary"
+      style={styles.scheduleCard}
+    >
       <View style={styles.scheduleIconWrap}>
         <Text style={styles.scheduleIcon}>{iconText}</Text>
       </View>
@@ -302,7 +332,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.background,
   },
-  backBtn: { paddingVertical: 6, paddingHorizontal: 6 },
+  backBtn: {
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 44,
+    minWidth: 44,
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+  },
   backText: {
     color: colors.textPrimary,
     fontSize: fontSizes.lg,
@@ -335,7 +372,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  monthBtn: { paddingHorizontal: spacing.md, paddingVertical: 4 },
+  monthBtn: {
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 44,
+    minWidth: 44,
+    paddingHorizontal: spacing.md,
+    paddingVertical: 4,
+  },
   monthBtnText: { color: colors.textPrimary, fontSize: 24, fontWeight: "700" },
   monthLabelWrap: { flex: 1, alignItems: "center" },
   monthLabel: {
