@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { AuthStackParamList } from '@/src/navigation/AuthStack';
+import { useScreenFocusEffect } from '@/src/utils/accessibilityFocus';
 import { colors, fontSizes, spacing } from '@/src/utils/theme';
 
 type WelcomeScreenProps = NativeStackScreenProps<AuthStackParamList, 'Welcome'>;
 
 export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
   const insets = useSafeAreaInsets();
+  const headerRef = useRef<View>(null);
+  useScreenFocusEffect(headerRef);
+
   const containerStyle = [
     styles.container,
     { paddingTop: Math.max(insets.top, spacing.lg) },
@@ -20,6 +24,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
     <ScrollView contentContainerStyle={containerStyle} showsVerticalScrollIndicator={false}>
       <View style={styles.loginRow}>
         <TouchableOpacity
+          accessibilityRole="button"
           accessibilityLabel="Log in"
           onPress={() => navigation.navigate('Login')}
           testID="welcome-login"
@@ -31,7 +36,14 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
         <View style={styles.logoCircle}>
           <Text style={styles.logoText}>CC</Text>
         </View>
-        <Text style={styles.title}>CareConnect</Text>
+        <View
+          ref={headerRef}
+          accessible
+          accessibilityRole="header"
+          accessibilityLabel="CareConnect"
+        >
+          <Text style={styles.title}>CareConnect</Text>
+        </View>
         <Text style={styles.subtitle}>Compassionate care coordination made simple</Text>
       </View>
       <View style={styles.featuresCard}>

@@ -1,14 +1,19 @@
 import {
   Alert,
+  AccessibilityInfo,
+  findNodeHandle,
+  InteractionManager,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { PrimaryButton } from "@/src/components/PrimaryButton";
 import { TextField } from "@/src/components/TextField";
@@ -26,6 +31,20 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const emailInputRef = useRef<React.ComponentRef<typeof TextInput>>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const task = InteractionManager.runAfterInteractions(() => {
+        const node = findNodeHandle(emailInputRef.current);
+        if (node) {
+          AccessibilityInfo.setAccessibilityFocus(node);
+        }
+        emailInputRef.current?.focus();
+      });
+      return () => task.cancel();
+    }, []),
+  );
 
   const handleSubmit = () => {
     const emailValid = email.includes("@");
@@ -85,6 +104,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
       </View>
       <View style={styles.form}>
         <TextField
+          ref={emailInputRef}
           accessibilityLabel="Email Address"
           keyboardType="email-address"
           label="Email Address"

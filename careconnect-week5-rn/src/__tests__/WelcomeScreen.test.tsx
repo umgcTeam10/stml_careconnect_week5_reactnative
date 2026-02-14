@@ -3,6 +3,10 @@ import { fireEvent, render } from '@testing-library/react-native';
 
 import { WelcomeScreen } from '@/src/screens/WelcomeScreen';
 
+jest.mock('@/src/utils/accessibilityFocus', () => ({
+  useScreenFocusEffect: () => {},
+}));
+
 jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => ({ top: 0, right: 0, bottom: 0, left: 0 }),
 }));
