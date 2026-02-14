@@ -3,6 +3,14 @@ import { fireEvent, render } from '@testing-library/react-native';
 
 import { LoginScreen } from '@/src/screens/LoginScreen';
 
+jest.mock('@react-navigation/native', () => {
+  const actual = jest.requireActual<typeof import('@react-navigation/native')>('@react-navigation/native');
+  return {
+    ...actual,
+    useFocusEffect: () => {},
+  };
+});
+
 const createNavigation = () => ({
   navigate: jest.fn(),
 });

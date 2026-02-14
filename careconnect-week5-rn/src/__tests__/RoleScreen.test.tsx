@@ -1,6 +1,10 @@
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+jest.mock('@/src/utils/accessibilityFocus', () => ({
+  useScreenFocusEffect: () => {},
+}));
 import { RoleScreen } from '@/src/screens/RoleScreen';
 
 const createNavigation = () => ({

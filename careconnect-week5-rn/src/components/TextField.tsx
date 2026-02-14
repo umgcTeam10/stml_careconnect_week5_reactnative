@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors, fontSizes, spacing } from '@/src/utils/theme';
 
@@ -12,20 +13,25 @@ type TextFieldProps = {
   accessibilityLabel?: string;
 };
 
-export function TextField({
-  label,
-  value,
-  onChangeText,
-  placeholder,
-  secureTextEntry,
-  keyboardType = 'default',
-  testID,
-  accessibilityLabel,
-}: TextFieldProps) {
+export const TextField = React.forwardRef<React.ComponentRef<typeof TextInput>, Omit<TextFieldProps, 'ref'>>(
+  function TextField(
+    {
+      label,
+      value,
+      onChangeText,
+      placeholder,
+      secureTextEntry,
+      keyboardType = 'default',
+      testID,
+      accessibilityLabel,
+    },
+    ref,
+  ) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
+        ref={ref}
         accessibilityLabel={accessibilityLabel}
         autoCapitalize="none"
         keyboardType={keyboardType}
@@ -39,7 +45,7 @@ export function TextField({
       />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
