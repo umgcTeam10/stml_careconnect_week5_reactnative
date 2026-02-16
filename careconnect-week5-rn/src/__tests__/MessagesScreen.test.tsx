@@ -122,7 +122,7 @@ describe("MessagesScreen", () => {
     );
 
     fireEvent.press(
-      getByLabelText(/Message from Robert Martinez.*Morning walk/),
+      getByLabelText(/Message from Robert Martinez.*Morning walk.*read/),
     );
 
     expect(Alert.alert).toHaveBeenCalledWith(
@@ -321,13 +321,28 @@ describe("MessagesScreen", () => {
       );
     });
 
-    it("all interactive elements have button role", () => {
-      const { getAllByRole } = render(
+    it("all interactive elements have accessibility roles", () => {
+      const { getByLabelText } = render(
         <MessagesScreen {...(makeProps() as any)} />,
       );
 
-      const buttons = getAllByRole("button");
-      expect(buttons.length).toBeGreaterThan(0);
+      // Verify key interactive elements have button roles
+      expect(getByLabelText("Back").props.accessibilityRole).toBe("button");
+      expect(getByLabelText("Emergency SOS").props.accessibilityRole).toBe(
+        "button",
+      );
+      expect(
+        getByLabelText("Sarah, Primary Care").props.accessibilityRole,
+      ).toBe("button");
+      expect(getByLabelText("Send message").props.accessibilityRole).toBe(
+        "button",
+      );
+      expect(getByLabelText("Quick reply: Yes").props.accessibilityRole).toBe(
+        "button",
+      );
+      expect(
+        getByLabelText("View appointment details").props.accessibilityRole,
+      ).toBe("button");
     });
   });
 });

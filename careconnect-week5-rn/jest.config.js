@@ -1,11 +1,21 @@
 module.exports = {
   preset: 'jest-expo',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/__tests__/**',
-    '!src/**/index.ts',
+  transformIgnorePatterns: [
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)'
   ],
-  collectCoverage: true,
-  coverageReporters: ['text', 'text-summary', 'lcov', 'json-summary'],
+  testMatch: [
+    '**/__tests__/**/*.test.[jt]s?(x)',
+    '**/?(*.)+(spec|test).[jt]s?(x)'
+  ],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/*.test.{js,jsx,ts,tsx}',
+    '!src/**/__tests__/**'
+  ],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  testEnvironment: 'node',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1'
+  }
 };
