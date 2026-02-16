@@ -50,19 +50,43 @@ describe("HomeScreen", () => {
 
   it("navigates from every dashboard action", () => {
     const navigation = createNavigation();
-    const { getByLabelText, getByTestId } = render(
+    const { getByRole, getByTestId } = render(
       <HomeScreen
         navigation={navigation as any}
         route={{ key: "Home", name: "Home" } as any}
       />,
     );
 
-    fireEvent.press(getByLabelText("Change role"));
-    fireEvent.press(getByLabelText("Log Wellness Check"));
-    fireEvent.press(getByLabelText("View all tasks"));
-    fireEvent.press(getByLabelText("View all wellness checks"));
-    fireEvent.press(getByLabelText("Send message"));
-    fireEvent.press(getByLabelText("View appointment details"));
+    const changeRole = getByRole("button", { name: "Change role" });
+    const logWellness = getByRole("button", { name: "Log Wellness Check" });
+    const viewTasks = getByRole("button", { name: "View all tasks" });
+    const viewWellness = getByRole("button", {
+      name: "View all wellness checks",
+    });
+    const sendMessage = getByRole("button", { name: "Send message" });
+    const viewAppointment = getByRole("button", {
+      name: "View appointment details",
+    });
+
+    expect(changeRole).toHaveProp(
+      "accessibilityHint",
+      "Navigates to the role selection screen",
+    );
+    expect(logWellness).toHaveProp(
+      "accessibilityHint",
+      "Opens your wellness logs screen",
+    );
+    expect(viewTasks).toBeEnabled();
+    expect(viewWellness).toBeEnabled();
+    expect(sendMessage).toBeEnabled();
+    expect(viewAppointment).toBeEnabled();
+
+    fireEvent.press(changeRole);
+    fireEvent.press(logWellness);
+    fireEvent.press(viewTasks);
+    fireEvent.press(viewWellness);
+    fireEvent.press(sendMessage);
+    fireEvent.press(viewAppointment);
     fireEvent.press(getByTestId("home-health-logs"));
 
     expect(navigation.navigate).toHaveBeenNthCalledWith(1, "Auth", {
@@ -79,7 +103,7 @@ describe("HomeScreen", () => {
   it("shows stored caregiver role and can change role", async () => {
     const navigation = createNavigation();
     (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce("caregiver");
-    const { getByText, getByLabelText } = render(
+    const { getByRole, getByText } = render(
       <HomeScreen
         navigation={navigation as any}
         route={{ key: "Home", name: "Home" } as any}
@@ -90,9 +114,30 @@ describe("HomeScreen", () => {
       expect(getByText("Caregiver")).toBeTruthy();
     });
 
-    fireEvent.press(getByLabelText("Change role"));
+    fireEvent.press(getByRole("button", { name: "Change role" }));
     expect(navigation.navigate).toHaveBeenCalledWith("Auth", {
       screen: "Role",
+    });
+  });
+
+  it("keeps compact touch targets at least 44x44", () => {
+    const navigation = createNavigation();
+    const { getByRole } = render(
+      <HomeScreen
+        navigation={navigation as any}
+        route={{ key: "Home", name: "Home" } as any}
+      />,
+    );
+
+    expect(getByRole("button", { name: "Change role" })).toHaveStyle({
+      minHeight: 44,
+      minWidth: 44,
+    });
+    expect(
+      getByRole("button", { name: "View appointment details" }),
+    ).toHaveStyle({
+      minHeight: 44,
+      minWidth: 44,
     });
   });
 

@@ -4,7 +4,7 @@ import { TasksScreen } from "@/src/screens/TasksScreen";
 
 describe("TasksScreen", () => {
   it("renders summary cards and top-level actions", () => {
-    const { getAllByText, getByText, getByLabelText } = render(<TasksScreen />);
+    const { getAllByText, getByRole, getByText } = render(<TasksScreen />);
 
     expect(getByText("3")).toBeTruthy();
     expect(getByText("2")).toBeTruthy();
@@ -13,9 +13,19 @@ describe("TasksScreen", () => {
     expect(getAllByText("Overdue")).toHaveLength(2);
     expect(getByText("You have 2 overdue tasks")).toBeTruthy();
 
-    expect(getByLabelText("Add task")).toBeTruthy();
-    expect(getByLabelText("Filter tasks")).toBeTruthy();
-    expect(getByLabelText("View overdue tasks")).toBeTruthy();
+    const addTask = getByRole("button", { name: "Add task" });
+    const filterTasks = getByRole("button", { name: "Filter tasks" });
+    const viewOverdue = getByRole("button", { name: "View overdue tasks" });
+
+    expect(addTask).toBeEnabled();
+    expect(filterTasks).toHaveProp(
+      "accessibilityHint",
+      "Opens task filter options",
+    );
+    expect(viewOverdue).toHaveProp(
+      "accessibilityHint",
+      "Shows only overdue tasks",
+    );
   });
 
   it("renders now card and upcoming task details", () => {
@@ -38,30 +48,35 @@ describe("TasksScreen", () => {
   });
 
   it("renders task tabs and unchecked checkbox controls", () => {
-    const { getByLabelText } = render(<TasksScreen />);
+    const { getByRole } = render(<TasksScreen />);
 
-    expect(getByLabelText("Show upcoming tasks")).toBeTruthy();
-    expect(getByLabelText("Show today tasks")).toBeTruthy();
-    expect(getByLabelText("Show overdue tasks")).toBeTruthy();
-    expect(getByLabelText("Show done tasks")).toBeTruthy();
+    const upcomingTab = getByRole("button", { name: "Show upcoming tasks" });
+    const todayTab = getByRole("button", { name: "Show today tasks" });
+    const overdueTab = getByRole("button", { name: "Show overdue tasks" });
+    const doneTab = getByRole("button", { name: "Show done tasks" });
+    expect(upcomingTab).toBeSelected();
+    expect(todayTab).toBeEnabled();
+    expect(overdueTab).toBeEnabled();
+    expect(doneTab).toBeEnabled();
 
-    const bloodPressureCheckbox = getByLabelText(
-      "Mark Blood Pressure Check done",
-    );
-    expect(bloodPressureCheckbox.props.accessibilityRole).toBe("checkbox");
-    expect(bloodPressureCheckbox.props.accessibilityState).toEqual({
+    const bloodPressureCheckbox = getByRole("checkbox", {
+      name: "Mark Blood Pressure Check done",
+    });
+    expect(bloodPressureCheckbox).toHaveProp("accessibilityState", {
       checked: false,
     });
+    expect(bloodPressureCheckbox).toHaveStyle({ width: 44, height: 44 });
 
-    const prepareLunchCheckbox = getByLabelText("Mark Prepare Lunch done");
-    expect(prepareLunchCheckbox.props.accessibilityRole).toBe("checkbox");
-    expect(prepareLunchCheckbox.props.accessibilityState).toEqual({
+    const prepareLunchCheckbox = getByRole("checkbox", {
+      name: "Mark Prepare Lunch done",
+    });
+    expect(prepareLunchCheckbox).toHaveProp("accessibilityState", {
       checked: false,
     });
   });
 
   it("allows pressing all available task actions", () => {
-    const { getByLabelText } = render(<TasksScreen />);
+    const { getByLabelText, getByRole } = render(<TasksScreen />);
 
     const labels = [
       "Add task",
@@ -83,6 +98,13 @@ describe("TasksScreen", () => {
 
     labels.forEach((label) => {
       fireEvent.press(getByLabelText(label));
+    });
+
+    expect(
+      getByRole("button", { name: "View appointment details" }),
+    ).toHaveStyle({
+      minHeight: 44,
+      minWidth: 44,
     });
   });
 });

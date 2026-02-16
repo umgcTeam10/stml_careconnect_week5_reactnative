@@ -1,5 +1,6 @@
 import { Feather, Ionicons } from "@expo/vector-icons";
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -97,10 +98,19 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
       <SafeAreaView edges={["top"]} style={styles.headerSafeArea}>
         <View style={styles.header}>
           <Text style={styles.headerDate}>{TODAY_DATE_LABEL}</Text>
-          <Text style={styles.headerTime}>{TODAY_TIME_LABEL}</Text>
+          <Text
+            accessibilityLiveRegion={
+              Platform.OS === "android" ? "polite" : "none"
+            }
+            style={styles.headerTime}
+          >
+            {TODAY_TIME_LABEL}
+          </Text>
           <View style={styles.headerRow}>
             <TouchableOpacity
+              accessible={true}
               accessibilityLabel="Change role"
+              accessibilityRole="button"
               accessibilityHint="Navigates to the role selection screen"
               onPress={() => navigation.navigate("Auth", { screen: "Role" })}
               style={styles.identityButton}
@@ -120,6 +130,7 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
       </SafeAreaView>
 
       <ScrollView
+        accessible={false}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
@@ -141,7 +152,10 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
             </View>
           </View>
           <TouchableOpacity
+            accessible={true}
             accessibilityLabel="Log Wellness Check"
+            accessibilityRole="button"
+            accessibilityHint="Opens your wellness logs screen"
             onPress={() => navigation.navigate("HealthLogs")}
             style={styles.primaryAction}
           >
@@ -190,7 +204,11 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
             <Text style={styles.infoLineText}>Dr. Lisa Chen, PT</Text>
           </View>
           <TouchableOpacity
+            accessible={true}
             accessibilityLabel="Set reminder"
+            accessibilityRole="button"
+            accessibilityHint="Sets a reminder for the next appointment"
+            onPress={() => undefined}
             style={styles.outlineAction}
           >
             <Ionicons
@@ -206,7 +224,10 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
           <View style={styles.rowBetween}>
             <Text style={styles.cardTitle}>{"Today's Tasks"}</Text>
             <TouchableOpacity
+              accessible={true}
               accessibilityLabel="View all tasks"
+              accessibilityRole="button"
+              accessibilityHint="Opens the tasks screen"
               onPress={() => navigation.navigate("Tasks")}
               style={styles.viewAll}
             >
@@ -234,7 +255,10 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
           <View style={styles.rowBetween}>
             <Text style={styles.cardTitle}>Recent Wellness Check</Text>
             <TouchableOpacity
+              accessible={true}
               accessibilityLabel="View all wellness checks"
+              accessibilityRole="button"
+              accessibilityHint="Opens the full wellness history"
               onPress={() => navigation.navigate("HealthLogs")}
               style={styles.viewAll}
             >
@@ -265,7 +289,10 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
             Need help or have questions? Reach out anytime.
           </Text>
           <TouchableOpacity
+            accessible={true}
             accessibilityLabel="Send message"
+            accessibilityRole="button"
+            accessibilityHint="Opens your messages with the care team"
             onPress={() => navigation.navigate("Messages")}
             style={styles.teamAction}
           >
@@ -303,7 +330,10 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
             <Text style={styles.summaryValue}>72 bpm</Text>
           </View>
           <TouchableOpacity
+            accessible={true}
             accessibilityLabel="Go to Health Logs"
+            accessibilityRole="button"
+            accessibilityHint="Opens complete health history"
             onPress={() => navigation.navigate("HealthLogs")}
             style={styles.outlineWideAction}
             testID="home-health-logs"
@@ -317,14 +347,23 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
         <View style={styles.nowLeft}>
           <Feather color={colors.onPrimary} name="clock" size={14} />
           <View style={styles.nowCopy}>
-            <Text numberOfLines={1} style={styles.nowTitle}>
+            <Text
+              accessibilityLiveRegion={
+                Platform.OS === "android" ? "polite" : "none"
+              }
+              numberOfLines={1}
+              style={styles.nowTitle}
+            >
               Now: Physical Therapy Appointment
             </Text>
             <Text style={styles.nowMeta}>02:00 PM • 4st act</Text>
           </View>
         </View>
         <TouchableOpacity
+          accessible={true}
           accessibilityLabel="View appointment details"
+          accessibilityRole="button"
+          accessibilityHint="Opens calendar details for the active appointment"
           onPress={() => navigation.navigate("Calendar")}
           style={styles.nowAction}
         >
@@ -371,6 +410,8 @@ const styles = StyleSheet.create({
   identityButton: {
     alignItems: "center",
     flexDirection: "row",
+    minHeight: 44,
+    minWidth: 44,
   },
   identityName: {
     color: colors.onPrimary,
@@ -456,8 +497,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 8,
     marginTop: spacing.lg,
+    minHeight: 44,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
+    justifyContent: "center",
   },
   primaryActionText: {
     color: colors.onPrimary,
@@ -553,6 +596,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: spacing.lg,
+    minHeight: 44,
     paddingVertical: spacing.md,
   },
   outlineActionText: {
@@ -565,6 +609,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     gap: 2,
+    minHeight: 44,
+    minWidth: 44,
+    paddingHorizontal: spacing.xs,
   },
   viewAllText: {
     color: colors.primary,
@@ -674,8 +721,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.onPrimary,
     borderRadius: 8,
     marginTop: spacing.lg,
+    minHeight: 44,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
+    justifyContent: "center",
   },
   teamActionText: {
     color: colors.primary,
@@ -732,8 +781,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: 8,
     borderWidth: 1,
+    minHeight: 44,
     marginTop: spacing.lg,
     paddingVertical: spacing.md,
+    justifyContent: "center",
   },
   nowBar: {
     alignItems: "center",
@@ -772,6 +823,9 @@ const styles = StyleSheet.create({
   nowAction: {
     alignItems: "center",
     flexDirection: "row",
+    minHeight: 44,
+    minWidth: 44,
+    paddingHorizontal: spacing.xs,
   },
   nowActionText: {
     color: colors.onPrimary,
