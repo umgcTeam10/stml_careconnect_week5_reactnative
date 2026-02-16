@@ -1,36 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
+    <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83284d5e-7a99-4b9f-8a9e-0f6d3b055b70" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__tests__/CalendarScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/CalendarScreen.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__tests__/MessagesScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/MessagesScreen.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__tests__/NavigationFlow.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/NavigationFlow.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__tests__/ProfileScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/ProfileScreen.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__tests__/TabsScreens.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/TabsScreens.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/CalendarScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/CalendarScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/MessagesScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MessagesScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/ProfileScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/ProfileScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/__tests__/LoginScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/LoginScreen.test.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/__tests__/RoleScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/RoleScreen.test.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/__tests__/WelcomeScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/WelcomeScreen.test.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TextField.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TextField.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/LoginScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/LoginScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/RoleScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/RoleScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/WelcomeScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/WelcomeScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/accessibilityFocus.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/accessibilityFocus.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="39XaUrSS78ycmpsenColusaqx65" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "git-widget-placeholder": "develop"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "git-widget-placeholder": "rn__weclcomeRoleLogin__JR",
+    "kotlin-language-version-configured": "true",
+    "settings.editor.selected.configurable": "preferences.externalTools"
   }
 }]]></component>
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="83284d5e-7a99-4b9f-8a9e-0f6d3b055b70" name="Changes" comment="" />
+      <created>1770844890546</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770844890546</updated>
+    </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

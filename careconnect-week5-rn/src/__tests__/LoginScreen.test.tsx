@@ -3,6 +3,14 @@ import { fireEvent, render } from '@testing-library/react-native';
 
 import { LoginScreen } from '@/src/screens/LoginScreen';
 
+jest.mock('@react-navigation/native', () => {
+  const actual = jest.requireActual<typeof import('@react-navigation/native')>('@react-navigation/native');
+  return {
+    ...actual,
+    useFocusEffect: () => {},
+  };
+});
+
 const createNavigation = () => ({
   navigate: jest.fn(),
 });
@@ -92,5 +100,19 @@ describe('LoginScreen', () => {
 
     fireEvent.press(checkbox);
     expect(checkbox.props.accessibilityState?.checked).toBe(true);
+  });
+
+  it('remember me checkbox has accessible name and hint for screen readers', () => {
+    const navigation = createNavigation();
+    const { getByRole, getByLabelText } = render(
+      <LoginScreen navigation={navigation as any} route={{ key: 'Login', name: 'Login' }} />
+    );
+
+    const checkbox = getByRole('checkbox');
+    expect(checkbox.props.accessibilityLabel).toBe('Remember me');
+    expect(checkbox.props.accessibilityHint).toContain('Double tap');
+    expect(checkbox.props.accessibilityHint).toContain('save your login');
+
+    expect(getByLabelText('Remember me')).toBe(checkbox);
   });
 });
