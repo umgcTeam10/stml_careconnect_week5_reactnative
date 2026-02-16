@@ -1,7 +1,6 @@
-// MessagesScreen.tsx
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Alert,
   SafeAreaView,
@@ -32,13 +31,69 @@ const warningBorder = "#F7C7CD";
 export function MessagesScreen({ navigation }: MessagesScreenProps) {
   const [message, setMessage] = useState("");
 
-  const showNotImplemented = () => {
-    Alert.alert("Not implemented", "Not implemented in Week 4");
+  const handleEmergencySOS = () => {
+    Alert.alert(
+      "Emergency SOS",
+      "Emergency alert will be sent to all caregivers and emergency contacts.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Send Alert", style: "destructive" },
+      ],
+    );
+  };
+
+  const handleQuickContact = (name: string, role: string) => {
+    Alert.alert(`Contact ${name}`, `Open chat with ${name} (${role})?`, [
+      { text: "OK" },
+    ]);
+  };
+
+  const handleSendMessage = () => {
+    if (!message.trim()) {
+      Alert.alert("Empty Message", "Please type a message before sending.");
+      return;
+    }
+    Alert.alert("Message Sent", "Your message has been sent successfully.");
+    setMessage("");
+  };
+
+  const handleQuickReply = (replyText: string) => {
+    Alert.alert("Quick Reply", `Send quick reply: "${replyText}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Send",
+        onPress: () => Alert.alert("Sent", `"${replyText}" has been sent.`),
+      },
+    ]);
+  };
+
+  const handleOpenMessage = (name: string) => {
+    Alert.alert("Open Conversation", `View full conversation with ${name}.`, [
+      { text: "OK" },
+    ]);
+  };
+
+  const handleAcknowledge = () => {
+    Alert.alert("Acknowledged", "Reminder has been acknowledged.", [
+      { text: "OK" },
+    ]);
+  };
+
+  const handleSnooze = () => {
+    Alert.alert("Snoozed", "Reminder snoozed for 10 minutes.", [
+      { text: "OK" },
+    ]);
+  };
+
+  const handleViewAppointment = () => {
+    Alert.alert(
+      "Appointment Details",
+      "Physical Therapy Appointment\nTime: 02:00 PM\nLocation: At clinic",
+      [{ text: "Close" }],
+    );
   };
 
   const onNavTap = (index: number) => {
-    // Mirrors Flutter routes:
-    // 0 Dashboard, 1 Tasks, 2 Calendar, 3 Messages, 4 Profile
     switch (index) {
       case 0:
         navigation.navigate("AppTabs", { screen: "Home" });
@@ -64,51 +119,65 @@ export function MessagesScreen({ navigation }: MessagesScreenProps) {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
         <TouchableOpacity
+          accessibilityRole="button"
           accessibilityLabel="Back"
+          accessibilityHint="Returns to previous screen"
           onPress={() => navigation.goBack()}
           style={styles.headerBack}
         >
           <Text style={styles.headerBackText}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Messages</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          Messages
+        </Text>
       </View>
 
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
+        accessible={false}
       >
         <View style={styles.emergencyWrap}>
           <TouchableOpacity
+            accessibilityRole="button"
             accessibilityLabel="Emergency SOS"
-            onPress={showNotImplemented}
+            accessibilityHint="Sends emergency alert to all caregivers and emergency contacts"
+            onPress={handleEmergencySOS}
             style={styles.emergencyBtn}
             activeOpacity={0.85}
           >
-            <Text style={styles.emergencyIcon}>⚠️</Text>
+            <Text
+              style={styles.emergencyIcon}
+              importantForAccessibility="no-hide-descendants"
+            >
+              ⚠️
+            </Text>
             <Text style={styles.emergencyText}>Emergency SOS</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>Quick Contact</Text>
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          Quick Contact
+        </Text>
 
         <View style={styles.quickRow}>
           <QuickContactAvatar
             initials="SJ"
             name="Sarah"
             subtitle="Primary Care"
-            onPress={showNotImplemented}
+            onPress={() => handleQuickContact("Sarah", "Primary Care")}
           />
           <QuickContactAvatar
             initials="DM"
-            name="Dr."
+            name="Dr. Martinez"
             subtitle="Doctor"
-            onPress={showNotImplemented}
+            onPress={() => handleQuickContact("Dr. Martinez", "Doctor")}
           />
           <QuickContactAvatar
             initials="NC"
-            name="Nurse"
+            name="Nurse Chen"
             subtitle="Home Care"
-            onPress={showNotImplemented}
+            onPress={() => handleQuickContact("Nurse Chen", "Home Care")}
           />
         </View>
 
@@ -116,32 +185,47 @@ export function MessagesScreen({ navigation }: MessagesScreenProps) {
           <View style={styles.composeLeft}>
             <TextField
               accessibilityLabel="Type your message"
+              accessibilityHint="Enter message to send"
               label=""
               placeholder="Type your message..."
               value={message}
               onChangeText={setMessage}
-              onFocus={showNotImplemented}
               testID="messages-compose"
             />
           </View>
 
           <TouchableOpacity
+            accessibilityRole="button"
             accessibilityLabel="Send message"
-            onPress={showNotImplemented}
+            accessibilityHint="Sends your message to selected contact"
+            onPress={handleSendMessage}
             style={styles.sendBtn}
             activeOpacity={0.85}
           >
-            <Text style={styles.sendIcon}>➤</Text>
+            <Text
+              style={styles.sendIcon}
+              importantForAccessibility="no-hide-descendants"
+            >
+              ➤
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.chipRow}>
-          <QuickReplyChip label="Yes" onPress={showNotImplemented} />
-          <QuickReplyChip label="On my way" onPress={showNotImplemented} />
-          <QuickReplyChip label="Call me" onPress={showNotImplemented} />
+          <QuickReplyChip label="Yes" onPress={() => handleQuickReply("Yes")} />
+          <QuickReplyChip
+            label="On my way"
+            onPress={() => handleQuickReply("On my way")}
+          />
+          <QuickReplyChip
+            label="Call me"
+            onPress={() => handleQuickReply("Call me")}
+          />
         </View>
 
-        <Text style={styles.sectionTitle}>Recent Messages</Text>
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          Recent Messages
+        </Text>
 
         <MessageCard
           initials="RM"
@@ -149,13 +233,23 @@ export function MessagesScreen({ navigation }: MessagesScreenProps) {
           message="Morning walk completed! Felt great today."
           time="1 hour ago"
           isUnread={false}
-          onPress={showNotImplemented}
+          onPress={() => handleOpenMessage("Robert Martinez")}
         />
 
-        <View style={styles.noticeCard}>
+        <View
+          style={styles.noticeCard}
+          accessible={true}
+          accessibilityRole="alert"
+          accessibilityLabel="CareConnect notification, 2 hours ago: Reminder: Physical therapy appointment at 2:00 PM"
+        >
           <View style={styles.noticeHeaderRow}>
             <View style={styles.noticeIconWrap}>
-              <Text style={styles.noticeIcon}>🔔</Text>
+              <Text
+                style={styles.noticeIcon}
+                importantForAccessibility="no-hide-descendants"
+              >
+                🔔
+              </Text>
             </View>
 
             <View style={{ flex: 1 }}>
@@ -170,8 +264,10 @@ export function MessagesScreen({ navigation }: MessagesScreenProps) {
 
           <View style={styles.noticeActionsRow}>
             <TouchableOpacity
+              accessibilityRole="button"
               accessibilityLabel="Acknowledge reminder"
-              onPress={showNotImplemented}
+              accessibilityHint="Marks reminder as acknowledged"
+              onPress={handleAcknowledge}
               style={styles.noticeActionPrimary}
               activeOpacity={0.85}
             >
@@ -179,8 +275,10 @@ export function MessagesScreen({ navigation }: MessagesScreenProps) {
             </TouchableOpacity>
 
             <TouchableOpacity
+              accessibilityRole="button"
               accessibilityLabel="Snooze 10 minutes"
-              onPress={showNotImplemented}
+              accessibilityHint="Reminds you again in 10 minutes"
+              onPress={handleSnooze}
               style={styles.noticeActionSecondary}
               activeOpacity={0.85}
             >
@@ -197,13 +295,13 @@ export function MessagesScreen({ navigation }: MessagesScreenProps) {
           message="Can you pick up my prescription this afternoon?"
           time="1 day ago"
           isUnread
-          onPress={showNotImplemented}
+          onPress={() => handleOpenMessage("Robert Martinez")}
         />
 
         <View style={{ height: 120 }} />
       </ScrollView>
 
-      <BottomBar onTap={onNavTap} onNowTap={showNotImplemented} />
+      <BottomBar onTap={onNavTap} onNowTap={handleViewAppointment} />
     </SafeAreaView>
   );
 }
@@ -221,13 +319,20 @@ function QuickContactAvatar({
 }) {
   return (
     <TouchableOpacity
-      accessibilityLabel={`${name} ${subtitle}`}
+      accessibilityRole="button"
+      accessibilityLabel={`${name}, ${subtitle}`}
+      accessibilityHint={`Opens chat with ${name}`}
       onPress={onPress}
       style={styles.quickContact}
       activeOpacity={0.85}
     >
       <View style={styles.avatarCircle}>
-        <Text style={styles.avatarText}>{initials}</Text>
+        <Text
+          style={styles.avatarText}
+          importantForAccessibility="no-hide-descendants"
+        >
+          {initials}
+        </Text>
       </View>
       <Text style={styles.quickName}>{name}</Text>
       <Text style={styles.quickSubtitle}>{subtitle}</Text>
@@ -244,7 +349,9 @@ function QuickReplyChip({
 }) {
   return (
     <TouchableOpacity
-      accessibilityLabel={label}
+      accessibilityRole="button"
+      accessibilityLabel={`Quick reply: ${label}`}
+      accessibilityHint={`Sends quick reply message: ${label}`}
       onPress={onPress}
       style={styles.chip}
       activeOpacity={0.85}
@@ -271,13 +378,21 @@ function MessageCard({
 }) {
   return (
     <TouchableOpacity
-      accessibilityLabel={`Message from ${name}`}
+      accessibilityRole="button"
+      accessibilityLabel={`Message from ${name}, ${message}, ${time}${isUnread ? ", unread" : ", read"}`}
+      accessibilityState={{ selected: isUnread }}
+      accessibilityHint="Opens full conversation"
       onPress={onPress}
       style={styles.msgCard}
       activeOpacity={0.9}
     >
       <View style={styles.msgAvatar}>
-        <Text style={styles.msgAvatarText}>{initials}</Text>
+        <Text
+          style={styles.msgAvatarText}
+          importantForAccessibility="no-hide-descendants"
+        >
+          {initials}
+        </Text>
       </View>
 
       <View style={{ flex: 1 }}>
@@ -309,23 +424,46 @@ function BottomBar({
 }) {
   return (
     <View>
-      <View style={styles.nowBar}>
-        <Text style={styles.nowIcon}>⏱</Text>
+      <View
+        style={styles.nowBar}
+        accessible={true}
+        accessibilityRole="alert"
+        accessibilityLabel="Current appointment: Physical Therapy at 2:00 PM at clinic"
+        accessibilityLiveRegion="polite"
+      >
+        <Text
+          style={styles.nowIcon}
+          importantForAccessibility="no-hide-descendants"
+        >
+          ⏱
+        </Text>
 
         <View style={{ flex: 1 }}>
           <Text style={styles.nowTitle}>Now: Physical Therapy Appointment</Text>
 
           <View style={styles.nowMetaRow}>
-            <Text style={styles.nowMetaText}>⏱</Text>
+            <Text
+              style={styles.nowMetaText}
+              importantForAccessibility="no-hide-descendants"
+            >
+              ⏱
+            </Text>
             <Text style={styles.nowMetaText}>02:00 PM</Text>
             <Text style={styles.nowMetaText}>•</Text>
-            <Text style={styles.nowMetaText}>🏥</Text>
+            <Text
+              style={styles.nowMetaText}
+              importantForAccessibility="no-hide-descendants"
+            >
+              🏥
+            </Text>
             <Text style={styles.nowMetaText}>At clinic</Text>
           </View>
         </View>
 
         <TouchableOpacity
-          accessibilityLabel="View current event"
+          accessibilityRole="button"
+          accessibilityLabel="View appointment details"
+          accessibilityHint="Opens full appointment information"
           onPress={onNowTap}
           style={styles.nowViewBtn}
           activeOpacity={0.85}
@@ -644,7 +782,7 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   nowIcon: {
-    color: "rgba(255,255,255,0.7)",
+    color: "rgba(255,255,255,0.85)",
     fontSize: 16,
   },
   nowTitle: {
@@ -659,7 +797,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   nowMetaText: {
-    color: "rgba(255,255,255,0.7)",
+    color: "rgba(255,255,255,0.85)",
     fontSize: 11,
   },
   nowViewBtn: {

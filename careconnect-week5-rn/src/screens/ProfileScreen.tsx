@@ -1,493 +1,412 @@
-import { Ionicons } from '@expo/vector-icons';
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeStackParamList } from "../navigation/types";
+import { colors, fontSizes, spacing } from "../constants/theme";
 
-import { AppTabParamList } from '@/src/navigation/AppTabs';
-import { RootStackParamList } from '@/src/navigation/RootNavigator';
-import { colors, fontSizes, spacing } from '@/src/utils/theme';
+type ProfileScreenProps = NativeStackScreenProps<HomeStackParamList, "Profile">;
 
-type ProfileScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<AppTabParamList, 'Profile'>,
-  NativeStackScreenProps<RootStackParamList>
->;
+type MenuSection = {
+  id: string;
+  title: string;
+  items: MenuItem[];
+};
 
-export function ProfileScreen({ navigation }: ProfileScreenProps) {
-  const insets = useSafeAreaInsets();
-  const [pushNotifications, setPushNotifications] = useState(true);
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [taskReminders, setTaskReminders] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+type MenuItem = {
+  id: string;
+  label: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  iconColor: string;
+  onPress: () => void;
+};
 
-  const showNotImplemented = () => {
-    Alert.alert('Not Implemented', 'This feature is not implemented in Week 5');
+export default function ProfileScreen({ navigation }: ProfileScreenProps) {
+  const handleEditProfile = () => {
+    Alert.alert(
+      "Edit Profile",
+      "Update your personal information, photo, and contact details.",
+      [{ text: "OK" }],
+    );
   };
 
-  const titleRowStyle = [
-    styles.titleRow,
-    { paddingTop: insets.top + spacing.sm },
+  const handleNotificationsPress = () => {
+    Alert.alert(
+      "Notification Settings",
+      "Manage your notification preferences for appointments, messages, and health reminders.",
+      [{ text: "OK" }],
+    );
+  };
+
+  const handlePrivacyPress = () => {
+    Alert.alert(
+      "Privacy Settings",
+      "Control who can see your information and how your data is used.",
+      [{ text: "OK" }],
+    );
+  };
+
+  const handleSecurityPress = () => {
+    Alert.alert(
+      "Security",
+      "Manage your password, two-factor authentication, and connected devices.",
+      [{ text: "OK" }],
+    );
+  };
+
+  const handleAccessibilityPress = () => {
+    Alert.alert(
+      "Accessibility",
+      "Customize text size, screen reader settings, and other accessibility features.",
+      [{ text: "OK" }],
+    );
+  };
+
+  const handleLanguagePress = () => {
+    Alert.alert(
+      "Language & Region",
+      "Change your preferred language and regional settings.",
+      [{ text: "OK" }],
+    );
+  };
+
+  const handleHelpPress = () => {
+    Alert.alert(
+      "Help & Support",
+      "Access user guides, FAQs, and contact support team.",
+      [{ text: "OK" }],
+    );
+  };
+
+  const handleAboutPress = () => {
+    Alert.alert(
+      "About CareConnect",
+      "Version 1.0.0\nDesigned for individuals with short-term memory loss.\n\n© 2026 CareConnect Team",
+      [{ text: "OK" }],
+    );
+  };
+
+  const handleLogout = () => {
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: () => {
+          navigation.navigate("Welcome");
+        },
+      },
+    ]);
+  };
+
+  const menuSections: MenuSection[] = [
+    {
+      id: "account",
+      title: "Account",
+      items: [
+        {
+          id: "notifications",
+          label: "Notifications",
+          icon: "notifications-outline",
+          iconColor: colors.primary,
+          onPress: handleNotificationsPress,
+        },
+        {
+          id: "privacy",
+          label: "Privacy",
+          icon: "lock-closed-outline",
+          iconColor: colors.primary,
+          onPress: handlePrivacyPress,
+        },
+        {
+          id: "security",
+          label: "Security",
+          icon: "shield-checkmark-outline",
+          iconColor: colors.primary,
+          onPress: handleSecurityPress,
+        },
+      ],
+    },
+    {
+      id: "preferences",
+      title: "Preferences",
+      items: [
+        {
+          id: "accessibility",
+          label: "Accessibility",
+          icon: "accessibility-outline",
+          iconColor: colors.primary,
+          onPress: handleAccessibilityPress,
+        },
+        {
+          id: "language",
+          label: "Language & Region",
+          icon: "globe-outline",
+          iconColor: colors.primary,
+          onPress: handleLanguagePress,
+        },
+      ],
+    },
+    {
+      id: "support",
+      title: "Support",
+      items: [
+        {
+          id: "help",
+          label: "Help & Support",
+          icon: "help-circle-outline",
+          iconColor: colors.primary,
+          onPress: handleHelpPress,
+        },
+        {
+          id: "about",
+          label: "About",
+          icon: "information-circle-outline",
+          iconColor: colors.primary,
+          onPress: handleAboutPress,
+        },
+      ],
+    },
   ];
 
   return (
-    <View style={styles.safe} testID="profile-screen">
-      <StatusBar style="dark" />
-      {/* Tier 1: white area (status bar + page title row) - matches Messages tab header */}
-      <View style={titleRowStyle}>
-        <Text style={styles.titleRowText} numberOfLines={1}>
-          Profile
-        </Text>
-      </View>
-      {/* Tier 2: blue bar - back + title + Settings (matches Messages blue bar) */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          accessibilityLabel="Back"
-          onPress={() => navigation.goBack()}
-          style={styles.headerBack}
-          testID="headerBackButton"
-        >
-          <Text style={styles.headerBackText}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profile</Text>
-        <TouchableOpacity
-          accessibilityLabel="Settings button"
-          onPress={showNotImplemented}
-          style={styles.settingsButtonWrap}
-          testID="profile-settings-button"
-        >
-          <Text style={styles.settingsButton}>Settings</Text>
-        </TouchableOpacity>
-      </View>
-
+    <View style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
         style={styles.scrollView}
-        testID="profile-scroll-view"
+        accessible={false}
+        testID="profile-scroll"
       >
-        {/* Profile Card */}
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>SJ</Text>
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.name}>Sarah Johnson</Text>
-              <Text style={styles.role}>Caregiver</Text>
-            </View>
-            <TouchableOpacity
-              accessibilityLabel="Edit profile"
-              onPress={showNotImplemented}
-              testID="profile-edit"
-            >
-              <Text style={styles.editButton}>Edit</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Contact Card */}
-        <View style={styles.card}>
-          <View style={styles.contactRow}>
-            <Ionicons name="mail-outline" size={20} color={colors.textSecondary} />
-            <Text style={styles.contactText}>sarah.johnson@email.com</Text>
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.contactRow}>
-            <Ionicons name="call-outline" size={20} color={colors.textSecondary} />
-            <Text style={styles.contactText}>(555) 123-4567</Text>
-          </View>
-        </View>
-
-        {/* Notifications */}
-        <Text style={styles.sectionTitle}>Notifications</Text>
-        <Text style={styles.sectionSubtitle}>Manage your notification settings</Text>
-
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <View style={[styles.iconCircle, { backgroundColor: '#E3F2FD' }]}>
-              <Ionicons name="notifications-outline" size={20} color={colors.primary} />
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.optionTitle}>Push Notifications</Text>
-              <Text style={styles.optionSubtitle}>Receive app notifications</Text>
-            </View>
-            <Switch
-              onValueChange={setPushNotifications}
-              testID="toggle-push"
-              trackColor={{ false: '#D1D5DB', true: colors.primary }}
-              value={pushNotifications}
+        <View style={styles.profileHeader}>
+          <View style={styles.avatarContainer}>
+            <Ionicons
+              name="person"
+              size={48}
+              color={colors.primary}
+              importantForAccessibility="no-hide-descendants"
             />
           </View>
-          <View style={styles.divider} />
-          <View style={styles.row}>
-            <View style={[styles.iconCircle, { backgroundColor: '#E3F2FD' }]}>
-              <Ionicons name="mail-outline" size={20} color={colors.primary} />
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.optionTitle}>Email Notifications</Text>
-              <Text style={styles.optionSubtitle}>Receive email updates</Text>
-            </View>
-            <Switch
-              onValueChange={setEmailNotifications}
-              testID="toggle-email"
-              trackColor={{ false: '#D1D5DB', true: colors.primary }}
-              value={emailNotifications}
-            />
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.row}>
-            <View style={[styles.iconCircle, { backgroundColor: '#FFF4E6' }]}>
-              <Ionicons name="alarm-outline" size={20} color="#EA8C3E" />
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.optionTitle}>Task Reminders</Text>
-              <Text style={styles.optionSubtitle}>Remind me about tasks</Text>
-            </View>
-            <Switch
-              onValueChange={setTaskReminders}
-              testID="toggle-reminders"
-              trackColor={{ false: '#D1D5DB', true: colors.primary }}
-              value={taskReminders}
-            />
-          </View>
-        </View>
-
-        {/* Preferences */}
-        <Text style={styles.sectionTitle}>Preferences</Text>
-        <Text style={styles.sectionSubtitle}>Customize your CareConnect experience</Text>
-
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <View style={[styles.iconCircle, { backgroundColor: '#F3F4F6' }]}>
-              <Ionicons name="moon-outline" size={20} color={colors.textSecondary} />
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.optionTitle}>Dark Mode</Text>
-              <Text style={styles.optionSubtitle}>Disabled</Text>
-            </View>
-            <Switch
-              onValueChange={setDarkMode}
-              testID="toggle-dark-mode"
-              trackColor={{ false: '#D1D5DB', true: colors.primary }}
-              value={darkMode}
-            />
-          </View>
-        </View>
-
-        {/* Accessibility */}
-        <Text style={styles.sectionTitle}>Accessibility</Text>
-        <Text style={styles.sectionSubtitle}>Adjust settings for better usability</Text>
-
-        <View style={styles.card}>
+          <Text style={styles.userName}>Sarah Johnson</Text>
+          <Text style={styles.userRole}>Patient</Text>
           <TouchableOpacity
-            accessibilityLabel="Text Size settings"
-            onPress={showNotImplemented}
-            style={styles.row}
-            testID="settings-text-size"
+            style={styles.editButton}
+            onPress={handleEditProfile}
+            accessibilityRole="button"
+            accessibilityLabel="Edit profile"
+            accessibilityHint="Opens form to update your personal information, photo, and contact details"
+            testID="edit-profile-button"
           >
-            <View style={[styles.iconCircle, { backgroundColor: '#F3F4F6' }]}>
-              <Ionicons name="text-outline" size={20} color={colors.textSecondary} />
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.optionTitle}>Text Size</Text>
-              <Text style={styles.optionSubtitle}>Adjust font size</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-          <View style={styles.divider} />
-          <TouchableOpacity
-            accessibilityLabel="High Contrast settings"
-            onPress={showNotImplemented}
-            style={styles.row}
-            testID="settings-contrast"
-          >
-            <View style={[styles.iconCircle, { backgroundColor: '#F3F4F6' }]}>
-              <Ionicons name="contrast-outline" size={20} color={colors.textSecondary} />
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.optionTitle}>High Contrast</Text>
-              <Text style={styles.optionSubtitle}>Improve visibility</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+            <Ionicons
+              name="create-outline"
+              size={18}
+              color={colors.white}
+              importantForAccessibility="no-hide-descendants"
+            />
+            <Text style={styles.editButtonText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.card}>
-          <TouchableOpacity
-            accessibilityLabel="Privacy & Security"
-            onPress={showNotImplemented}
-            style={styles.row}
-            testID="settings-privacy"
-          >
-            <View style={[styles.iconCircle, { backgroundColor: '#F3F4F6' }]}>
-              <Ionicons name="shield-outline" size={20} color={colors.textSecondary} />
+        {menuSections.map((section) => (
+          <View key={section.id} style={styles.menuSection}>
+            <Text style={styles.sectionTitle} accessibilityRole="header">
+              {section.title}
+            </Text>
+            <View style={styles.menuItems}>
+              {section.items.map((item, index) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={[
+                    styles.menuItem,
+                    index === section.items.length - 1 && styles.menuItemLast,
+                  ]}
+                  onPress={item.onPress}
+                  accessibilityRole="button"
+                  accessibilityLabel={item.label}
+                  accessibilityHint={`Opens ${item.label.toLowerCase()} settings`}
+                  testID={`menu-item-${item.id}`}
+                >
+                  <View style={styles.menuItemLeft}>
+                    <View
+                      style={[
+                        styles.menuIconContainer,
+                        { backgroundColor: `${item.iconColor}15` },
+                      ]}
+                    >
+                      <Ionicons
+                        name={item.icon}
+                        size={22}
+                        color={item.iconColor}
+                        importantForAccessibility="no-hide-descendants"
+                      />
+                    </View>
+                    <Text style={styles.menuItemLabel}>{item.label}</Text>
+                  </View>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={20}
+                    color={colors.textSecondary}
+                    importantForAccessibility="no-hide-descendants"
+                  />
+                </TouchableOpacity>
+              ))}
             </View>
-            <View style={styles.info}>
-              <Text style={styles.optionTitle}>Privacy & Security</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
+          </View>
+        ))}
 
-        <View style={styles.card}>
-          <TouchableOpacity
-            accessibilityLabel="Help & Support"
-            onPress={showNotImplemented}
-            style={styles.row}
-            testID="settings-help"
-          >
-            <View style={[styles.iconCircle, { backgroundColor: '#F3F4F6' }]}>
-              <Ionicons name="help-circle-outline" size={20} color={colors.textSecondary} />
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.optionTitle}>Help & Support</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Sign Out */}
         <TouchableOpacity
-          accessibilityLabel="Sign out"
-          onPress={showNotImplemented}
-          style={styles.signOut}
-          testID="profile-signout"
+          style={styles.logoutButton}
+          onPress={handleLogout}
+          accessibilityRole="button"
+          accessibilityLabel="Logout"
+          accessibilityHint="Logout from your account. You will need to login again to access the app"
+          testID="logout-button"
         >
-          <Ionicons name="log-out-outline" size={20} color="#DA3B4A" />
-          <Text style={styles.signOutText}>Sign Out</Text>
+          <Ionicons
+            name="log-out-outline"
+            size={22}
+            color={colors.error}
+            importantForAccessibility="no-hide-descendants"
+          />
+          <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
+
+        <Text
+          style={styles.versionText}
+          accessibilityLabel="CareConnect version 1.0.0"
+        >
+          Version 1.0.0
+        </Text>
       </ScrollView>
-
-      {/* Appointment Banner */}
-      <View style={styles.banner}>
-        <Ionicons name="time-outline" size={18} color="rgba(255, 255, 255, 0.8)" />
-        <View style={styles.bannerContent}>
-          <Text style={styles.bannerTitle}>Now: Physical Therapy Appointment</Text>
-          <View style={styles.bannerDetails}>
-            <Ionicons name="time-outline" size={12} color="rgba(255, 255, 255, 0.7)" />
-            <Text style={styles.bannerDetailText}>02:00 PM</Text>
-            <Text style={styles.bannerDot}>•</Text>
-            <Ionicons name="location-outline" size={12} color="rgba(255, 255, 255, 0.7)" />
-            <Text style={styles.bannerDetailText}>At clinic</Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          accessibilityLabel="View appointment"
-          onPress={showNotImplemented}
-          style={styles.viewButton}
-          testID="appointment-view"
-        >
-          <Text style={styles.viewText}>View</Text>
-          <Ionicons name="arrow-forward" size={14} color={colors.onPrimary} />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
+  container: {
     flex: 1,
     backgroundColor: colors.background,
-  },
-  titleRow: {
-    backgroundColor: colors.background,
-    paddingHorizontal: spacing.xl,
-    paddingBottom: spacing.md,
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  titleRowText: {
-    color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  header: {
-    backgroundColor: colors.background,
-    paddingHorizontal: spacing.xl,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.lg,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  headerBack: {
-    paddingVertical: 4,
-    paddingHorizontal: 4,
-  },
-  headerBackText: {
-    color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  headerTitle: {
-    color: colors.textPrimary,
-    flex: 1,
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  settingsButtonWrap: {
-    paddingVertical: 4,
-    paddingHorizontal: 4,
-  },
-  settingsButton: {
-    color: colors.textPrimary,
-    fontSize: fontSizes.md,
-    fontWeight: '600',
   },
   scrollView: {
     flex: 1,
   },
-  scrollContent: {
-    paddingBottom: 20,
-    paddingHorizontal: spacing.xl,
-    paddingTop: spacing.xl,
+  profileHeader: {
+    alignItems: "center",
+    paddingVertical: spacing.xl,
+    paddingHorizontal: spacing.lg,
+    backgroundColor: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
-  card: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 12,
-    borderWidth: 1,
+  avatarContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: `${colors.primary}15`,
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: spacing.md,
-    padding: spacing.lg,
   },
-  row: {
-    alignItems: 'center',
-    flexDirection: 'row',
+  userName: {
+    fontSize: fontSizes.xxl,
+    fontWeight: "600",
+    color: colors.text,
+    marginBottom: spacing.xs,
   },
-  avatar: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderRadius: 35,
-    height: 70,
-    justifyContent: 'center',
-    width: 70,
-  },
-  avatarText: {
-    color: colors.onPrimary,
-    fontSize: fontSizes.xl,
-    fontWeight: '700',
-  },
-  info: {
-    flex: 1,
-    marginLeft: spacing.md,
-  },
-  name: {
-    color: colors.textPrimary,
-    fontSize: fontSizes.lg,
-    fontWeight: '700',
-  },
-  role: {
-    color: colors.textSecondary,
+  userRole: {
     fontSize: fontSizes.md,
-    marginTop: 4,
+    color: colors.textSecondary,
+    marginBottom: spacing.lg,
   },
   editButton: {
-    color: colors.primary,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    borderRadius: 20,
+    gap: spacing.xs,
+  },
+  editButtonText: {
+    color: colors.white,
     fontSize: fontSizes.md,
-    fontWeight: '600',
+    fontWeight: "600",
   },
-  contactRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingVertical: 4,
-  },
-  contactText: {
-    color: colors.textSecondary,
-    fontSize: fontSizes.md,
-    marginLeft: spacing.md,
-  },
-  divider: {
-    backgroundColor: colors.border,
-    height: 1,
-    marginVertical: spacing.md,
+  menuSection: {
+    marginTop: spacing.lg,
   },
   sectionTitle: {
-    color: colors.textPrimary,
-    fontSize: fontSizes.md,
-    fontWeight: '700',
-    marginBottom: 4,
-    marginTop: spacing.lg,
-  },
-  sectionSubtitle: {
-    color: colors.textSecondary,
     fontSize: fontSizes.sm,
-    marginBottom: spacing.sm,
-  },
-  iconCircle: {
-    alignItems: 'center',
-    borderRadius: 20,
-    height: 40,
-    justifyContent: 'center',
-    width: 40,
-  },
-  optionTitle: {
-    color: colors.textPrimary,
-    fontSize: fontSizes.md,
-    fontWeight: '600',
-  },
-  optionSubtitle: {
+    fontWeight: "600",
     color: colors.textSecondary,
-    fontSize: fontSizes.sm,
-    marginTop: 2,
-  },
-  signOut: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    flexDirection: 'row',
-    marginTop: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  signOutText: {
-    color: '#DA3B4A',
-    fontSize: fontSizes.lg,
-    fontWeight: '600',
-    marginLeft: spacing.sm,
-  },
-  banner: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
-    flexDirection: 'row',
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
     paddingHorizontal: spacing.lg,
-    paddingVertical: 10,
+    paddingVertical: spacing.sm,
   },
-  bannerContent: {
-    flex: 1,
-    marginLeft: spacing.sm,
+  menuItems: {
+    backgroundColor: colors.white,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: colors.border,
   },
-  bannerTitle: {
-    color: colors.onPrimary,
-    fontSize: 12,
-    fontWeight: '600',
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
-  bannerDetails: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginTop: 4,
+  menuItemLast: {
+    borderBottomWidth: 0,
   },
-  bannerDetailText: {
-    color: 'rgba(255, 255, 255, 0.7)',
-    fontSize: 11,
-    marginLeft: 4,
-    marginRight: 6,
+  menuItemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.md,
   },
-  bannerDot: {
-    color: 'rgba(255, 255, 255, 0.7)',
-    fontSize: 11,
-    marginRight: 6,
+  menuIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  viewButton: {
-    alignItems: 'center',
-    flexDirection: 'row',
+  menuItemLabel: {
+    fontSize: fontSizes.md,
+    color: colors.text,
+    fontWeight: "500",
   },
-  viewText: {
-    color: colors.onPrimary,
-    fontSize: 14,
-    fontWeight: '500',
-    marginRight: 4,
+  logoutButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.sm,
+    backgroundColor: colors.white,
+    marginTop: spacing.lg,
+    marginHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.error,
+  },
+  logoutButtonText: {
+    fontSize: fontSizes.md,
+    fontWeight: "600",
+    color: colors.error,
+  },
+  versionText: {
+    textAlign: "center",
+    fontSize: fontSizes.sm,
+    color: colors.textSecondary,
+    marginTop: spacing.xl,
+    marginBottom: spacing.xxl,
+    opacity: 0.85,
   },
 });

@@ -6,7 +6,9 @@ import {
   View,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { useScreenFocusEffect } from "@/src/utils/accessibilityFocus";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { PrimaryButton } from "@/src/components/PrimaryButton";
@@ -20,6 +22,9 @@ const ROLE_STORAGE_KEY = "careconnect.role";
 
 export function RoleScreen({ navigation }: RoleScreenProps) {
   const [role, setRole] = useState<RoleValue | null>(null);
+  const headerRef = useRef<View>(null);
+
+  useScreenFocusEffect(headerRef);
 
   useEffect(() => {
     const loadRole = async () => {
@@ -46,14 +51,24 @@ export function RoleScreen({ navigation }: RoleScreenProps) {
         <View style={styles.logoCircle}>
           <Text style={styles.logoText}>CC</Text>
         </View>
-        <Text style={styles.title}>Choose your role</Text>
+        <View
+          ref={headerRef}
+          accessible
+          accessibilityRole="header"
+          accessibilityLabel="Choose your role"
+        >
+          <Text style={styles.title}>Choose your role</Text>
+        </View>
         <Text style={styles.subtitle}>
           Help us personalize your CareConnect experience
         </Text>
       </View>
       <View style={styles.cards}>
         <TouchableOpacity
+          accessibilityRole="button"
           accessibilityLabel="Caregiver"
+          accessibilityHint="Double tap to select this role. You are caring for a loved one or patient."
+          accessibilityState={{ selected: role === "caregiver" }}
           onPress={() => handleSelect("caregiver")}
           style={[styles.card, role === "caregiver" && styles.cardSelected]}
           testID="role-caregiver"
@@ -79,7 +94,10 @@ export function RoleScreen({ navigation }: RoleScreenProps) {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
+          accessibilityRole="button"
           accessibilityLabel="Care Recipient"
+          accessibilityHint="Double tap to select this role. You are receiving care and support."
+          accessibilityState={{ selected: role === "careRecipient" }}
           onPress={() => handleSelect("careRecipient")}
           style={[styles.card, role === "careRecipient" && styles.cardSelected]}
           testID="role-care-recipient"

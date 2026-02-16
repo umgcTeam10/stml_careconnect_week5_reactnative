@@ -1,5 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -87,6 +88,7 @@ export function TasksScreen() {
   return (
     <View style={styles.container}>
       <ScrollView
+        accessible={false}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
@@ -120,13 +122,16 @@ export function TasksScreen() {
           <View style={styles.addTaskButtonWrap}>
             <PrimaryButton
               accessibilityLabel="Add task"
+              accessibilityHint="Creates a new task"
               onPress={handlePress}
               title="+  Add Task"
             />
           </View>
           <TouchableOpacity
+            accessible={true}
             accessibilityLabel="Filter tasks"
             accessibilityRole="button"
+            accessibilityHint="Opens task filter options"
             onPress={handlePress}
             style={styles.filterButton}
           >
@@ -144,8 +149,10 @@ export function TasksScreen() {
             </Text>
           </View>
           <TouchableOpacity
+            accessible={true}
             accessibilityLabel="View overdue tasks"
             accessibilityRole="button"
+            accessibilityHint="Shows only overdue tasks"
             onPress={handlePress}
             style={styles.overdueViewButton}
           >
@@ -167,7 +174,14 @@ export function TasksScreen() {
                   <Text style={styles.nowTypeBadgeText}>PT</Text>
                 </View>
               </View>
-              <Text style={styles.nowTitle}>Physical Therapy Appointment</Text>
+              <Text
+                accessibilityLiveRegion={
+                  Platform.OS === "android" ? "polite" : "none"
+                }
+                style={styles.nowTitle}
+              >
+                Physical Therapy Appointment
+              </Text>
               <Text style={styles.nowMeta}>Due now - 02:00 PM | At clinic</Text>
             </View>
           </View>
@@ -175,13 +189,16 @@ export function TasksScreen() {
             <View style={styles.halfActionButton}>
               <PrimaryButton
                 accessibilityLabel="Start task now"
+                accessibilityHint="Begins the current task"
                 onPress={handlePress}
                 title="Start"
               />
             </View>
             <TouchableOpacity
+              accessible={true}
               accessibilityLabel="Snooze task for 10 minutes"
               accessibilityRole="button"
+              accessibilityHint="Delays this task by 10 minutes"
               onPress={handlePress}
               style={styles.secondaryActionButton}
             >
@@ -198,9 +215,12 @@ export function TasksScreen() {
 
             return (
               <TouchableOpacity
+                accessible={true}
                 key={tabLabel}
                 accessibilityLabel={`Show ${tabLabel.toLowerCase()} tasks`}
                 accessibilityRole="button"
+                accessibilityHint={`Filters the task list to ${tabLabel.toLowerCase()} items`}
+                accessibilityState={{ selected: isSelected }}
                 onPress={handlePress}
                 style={[
                   styles.tabButton,
@@ -225,12 +245,16 @@ export function TasksScreen() {
           <View key={task.id} style={styles.taskCard}>
             <View style={styles.taskCardBody}>
               <TouchableOpacity
+                accessible={true}
                 accessibilityLabel={`Mark ${task.title} done`}
                 accessibilityRole="checkbox"
+                accessibilityHint={`Marks ${task.title} as completed`}
                 accessibilityState={{ checked: false }}
                 onPress={handlePress}
                 style={styles.checkbox}
-              />
+              >
+                <View style={styles.checkboxInner} />
+              </TouchableOpacity>
               <View style={styles.taskDetails}>
                 <View style={styles.taskTitleRow}>
                   <View style={styles.taskTypeBadge}>
@@ -259,13 +283,16 @@ export function TasksScreen() {
               <View style={styles.halfActionButton}>
                 <PrimaryButton
                   accessibilityLabel={`Mark ${task.title} as done`}
+                  accessibilityHint={`Marks ${task.title} as complete`}
                   onPress={handlePress}
                   title="Done"
                 />
               </View>
               <TouchableOpacity
+                accessible={true}
                 accessibilityLabel={`Reschedule ${task.title}`}
                 accessibilityRole="button"
+                accessibilityHint={`Opens a new date and time for ${task.title}`}
                 onPress={handlePress}
                 style={styles.secondaryActionButton}
               >
@@ -280,15 +307,23 @@ export function TasksScreen() {
         <View style={styles.nowBarLeft}>
           <Feather color={colors.onPrimary} name="clock" size={14} />
           <View style={styles.nowBarCopy}>
-            <Text numberOfLines={1} style={styles.nowBarTitle}>
+            <Text
+              accessibilityLiveRegion={
+                Platform.OS === "android" ? "polite" : "none"
+              }
+              numberOfLines={1}
+              style={styles.nowBarTitle}
+            >
               Now: Physical Therapy Appointment
             </Text>
             <Text style={styles.nowBarMeta}>02:00 PM • At clinic</Text>
           </View>
         </View>
         <TouchableOpacity
+          accessible={true}
           accessibilityLabel="View appointment details"
           accessibilityRole="button"
+          accessibilityHint="Opens calendar details for this appointment"
           onPress={handlePress}
           style={styles.nowBarAction}
         >
@@ -545,13 +580,20 @@ const styles = StyleSheet.create({
     gap: spacing.lg,
   },
   checkbox: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 2,
+  },
+  checkboxInner: {
     width: 24,
     height: 24,
     borderRadius: 6,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    marginTop: 2,
   },
   taskDetails: {
     flex: 1,
@@ -664,6 +706,9 @@ const styles = StyleSheet.create({
   nowBarAction: {
     alignItems: "center",
     flexDirection: "row",
+    minHeight: 44,
+    minWidth: 44,
+    paddingHorizontal: spacing.xs,
   },
   nowBarActionText: {
     color: colors.onPrimary,
