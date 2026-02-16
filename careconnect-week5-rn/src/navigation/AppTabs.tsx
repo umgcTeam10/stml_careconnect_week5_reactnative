@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { CalendarScreen } from '@/src/screens/CalendarScreen';
 import { HomeStack } from '@/src/navigation/HomeStack';  // ← Changed
 import { MessagesScreen } from '@/src/screens/MessagesScreen';
-import { ProfileScreen } from '@/src/screens/ProfileScreen';
+import ProfileScreen from '@/src/screens/ProfileScreen';
 import { TasksScreen } from '@/src/screens/TasksScreen';
 import { colors } from '@/src/utils/theme';
 

@@ -9,7 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeStackParamList } from "../navigation/types";
-import { colors, fontSizes, spacing } from "../constants/theme";
+import { colors, fontSizes, spacing } from "@/src/utils/theme";
 
 type ProfileScreenProps = NativeStackScreenProps<HomeStackParamList, "Profile">;
 
@@ -204,7 +204,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
             <Ionicons
               name="create-outline"
               size={18}
-              color={colors.white}
+              color={colors.onPrimary}
               importantForAccessibility="no-hide-descendants"
             />
             <Text style={styles.editButtonText}>Edit Profile</Text>
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: spacing.xl,
     paddingHorizontal: spacing.lg,
-    backgroundColor: colors.white,
+    backgroundColor: colors.onPrimary,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: fontSizes.xxl,
     fontWeight: "600",
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
   userRole: {
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   editButtonText: {
-    color: colors.white,
+    color: colors.onPrimary,
     fontSize: fontSizes.md,
     fontWeight: "600",
   },
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   menuItems: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.onPrimary,
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: colors.border,
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
   },
   menuItemLabel: {
     fontSize: fontSizes.md,
-    color: colors.text,
+    color: colors.textPrimary,
     fontWeight: "500",
   },
   logoutButton: {
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.sm,
-    backgroundColor: colors.white,
+    backgroundColor: colors.onPrimary,
     marginTop: spacing.lg,
     marginHorizontal: spacing.lg,
     paddingVertical: spacing.md,
