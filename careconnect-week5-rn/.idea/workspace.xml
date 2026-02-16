@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83284d5e-7a99-4b9f-8a9e-0f6d3b055b70" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eas.json" beforeDir="false" afterPath="$PROJECT_DIR$/eas.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/__tests__/LoginScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/LoginScreen.test.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/__tests__/RoleScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/RoleScreen.test.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/__tests__/WelcomeScreen.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/WelcomeScreen.test.tsx" afterDir="false" />
@@ -15,6 +13,7 @@
       <change beforePath="$PROJECT_DIR$/src/screens/LoginScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/LoginScreen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/RoleScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/RoleScreen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/WelcomeScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/WelcomeScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/accessibilityFocus.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/accessibilityFocus.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,21 +34,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;welcomeRoleLogin__JR&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.externalTools&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "git-widget-placeholder": "rn__weclcomeRoleLogin__JR",
+    "kotlin-language-version-configured": "true",
+    "settings.editor.selected.configurable": "preferences.externalTools"
   }
-}</component>
+}]]></component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="83284d5e-7a99-4b9f-8a9e-0f6d3b055b70" name="Changes" comment="" />

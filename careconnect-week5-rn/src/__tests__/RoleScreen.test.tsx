@@ -96,4 +96,30 @@ describe('RoleScreen', () => {
       expect(getAllByText('Selected')).toHaveLength(1);
     });
   });
+
+  it('role cards expose selected state and hint to assistive tech', async () => {
+    const navigation = createNavigation();
+    const { getByTestId, getByLabelText } = render(
+      <RoleScreen navigation={navigation as any} route={{ key: 'Role', name: 'Role' }} />
+    );
+
+    expect(getByLabelText('Caregiver').props.accessibilityState?.selected).toBe(false);
+    expect(getByLabelText('Care Recipient').props.accessibilityState?.selected).toBe(false);
+    expect(getByLabelText('Caregiver').props.accessibilityHint).toContain('Double tap');
+    expect(getByLabelText('Care Recipient').props.accessibilityHint).toContain('Double tap');
+
+    fireEvent.press(getByTestId('role-caregiver'));
+
+    await waitFor(() => {
+      expect(getByLabelText('Caregiver').props.accessibilityState?.selected).toBe(true);
+      expect(getByLabelText('Care Recipient').props.accessibilityState?.selected).toBe(false);
+    });
+
+    fireEvent.press(getByTestId('role-care-recipient'));
+
+    await waitFor(() => {
+      expect(getByLabelText('Caregiver').props.accessibilityState?.selected).toBe(false);
+      expect(getByLabelText('Care Recipient').props.accessibilityState?.selected).toBe(true);
+    });
+  });
 });

@@ -67,6 +67,8 @@ export function RoleScreen({ navigation }: RoleScreenProps) {
         <TouchableOpacity
           accessibilityRole="button"
           accessibilityLabel="Caregiver"
+          accessibilityHint="Double tap to select this role. You are caring for a loved one or patient."
+          accessibilityState={{ selected: role === "caregiver" }}
           onPress={() => handleSelect("caregiver")}
           style={[styles.card, role === "caregiver" && styles.cardSelected]}
           testID="role-caregiver"
@@ -94,6 +96,8 @@ export function RoleScreen({ navigation }: RoleScreenProps) {
         <TouchableOpacity
           accessibilityRole="button"
           accessibilityLabel="Care Recipient"
+          accessibilityHint="Double tap to select this role. You are receiving care and support."
+          accessibilityState={{ selected: role === "careRecipient" }}
           onPress={() => handleSelect("careRecipient")}
           style={[styles.card, role === "careRecipient" && styles.cardSelected]}
           testID="role-care-recipient"

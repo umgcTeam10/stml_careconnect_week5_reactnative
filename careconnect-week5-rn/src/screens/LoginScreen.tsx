@@ -137,6 +137,8 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
           <View style={styles.rememberLeft}>
             <TouchableOpacity
               accessibilityRole="checkbox"
+              accessibilityLabel="Remember me"
+              accessibilityHint="Double tap to save your login on this device. When checked, you stay signed in."
               accessibilityState={{ checked: rememberMe }}
               onPress={() => setRememberMe((prev) => !prev)}
               style={[styles.checkbox, rememberMe && styles.checkboxSelected]}
