@@ -12,8 +12,8 @@ describe("Tab screens", () => {
   });
 
   it("renders messages screen content", () => {
-    const { getByText } = render(<MessagesScreen />);
-    expect(getByText("Messages")).toBeTruthy();
+    const { getAllByText, getByText } = render(<MessagesScreen />);
+    expect(getAllByText("Messages").length).toBeGreaterThan(0);
     expect(getByText("Quick Contact")).toBeTruthy();
     expect(getByText("Recent Messages")).toBeTruthy();
   });

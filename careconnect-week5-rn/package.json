@@ -11,6 +11,9 @@
     "lint": "expo lint",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "test:coverage:ci": "jest --coverage --runInBand --watchAll=false",
+    "e2e:maestro": "node ./scripts/run-maestro.js test .maestro/flow.yaml",
+    "e2e:maestro:debug": "node ./scripts/run-maestro.js test .maestro/flow.yaml --debug-output .maestro/debug",
     "prebuild": "expo prebuild",
     "build:apk": "expo prebuild --platform android && cd android && .\\gradlew assembleRelease && cd ..",
     "build:apk:debug": "expo prebuild --platform android && cd android && .\\gradlew assembleDebug && cd .."

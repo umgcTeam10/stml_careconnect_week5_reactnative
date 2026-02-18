@@ -42,6 +42,29 @@ To learn more about developing your project with Expo, look at the following res
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
+## Testing
+
+### Unit + Coverage
+
+```bash
+npm run test:coverage:ci
+```
+
+Coverage is enforced at 90%+ for global lines/statements in `jest.config.js`.
+
+### E2E with Maestro
+
+1. Install Maestro CLI: https://maestro.mobile.dev/getting-started/installing-maestro
+   If it's not on `PATH`, set `MAESTRO_BIN` to the executable path.
+2. Build and install the Android app on emulator/device (for example `npm run android`).
+3. Run:
+
+```bash
+npm run e2e:maestro
+```
+
+The primary flow lives at `.maestro/flow.yaml`.
+
 ## Join the community
 
 Join our community of developers creating universal apps.

@@ -8,4 +8,10 @@ module.exports = {
   ],
   collectCoverage: true,
   coverageReporters: ['text', 'text-summary', 'lcov', 'json-summary'],
+  coverageThreshold: {
+    global: {
+      lines: 90,
+      statements: 90,
+    },
+  },
 };

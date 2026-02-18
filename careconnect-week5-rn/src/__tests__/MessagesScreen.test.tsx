@@ -22,11 +22,11 @@ describe("MessagesScreen", () => {
   });
 
   it("renders primary messaging content", () => {
-    const { getByPlaceholderText, getByText } = render(
+    const { getAllByText, getByPlaceholderText, getByText } = render(
       <MessagesScreen {...(makeProps() as any)} />,
     );
 
-    expect(getByText("Messages")).toBeTruthy();
+    expect(getAllByText("Messages").length).toBeGreaterThan(0);
     expect(getByText("Emergency SOS")).toBeTruthy();
     expect(getByText("Quick Contact")).toBeTruthy();
     expect(getByPlaceholderText("Type your message...")).toBeTruthy();
@@ -74,6 +74,26 @@ describe("MessagesScreen", () => {
     );
   });
 
+  it("shows contact alert for all quick contacts", () => {
+    const { getByLabelText } = render(
+      <MessagesScreen {...(makeProps() as any)} />,
+    );
+
+    fireEvent.press(getByLabelText("Dr. Martinez, Doctor"));
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Contact Dr. Martinez",
+      "Open chat with Dr. Martinez (Doctor)?",
+      expect.any(Array),
+    );
+
+    fireEvent.press(getByLabelText("Nurse Chen, Home Care"));
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Contact Nurse Chen",
+      "Open chat with Nurse Chen (Home Care)?",
+      expect.any(Array),
+    );
+  });
+
   it("shows empty message alert when sending without text", () => {
     const { getByLabelText } = render(
       <MessagesScreen {...(makeProps() as any)} />,
@@ -116,6 +136,58 @@ describe("MessagesScreen", () => {
     );
   });
 
+  it("sends quick reply when confirmation is accepted", () => {
+    const { getByLabelText } = render(
+      <MessagesScreen {...(makeProps() as any)} />,
+    );
+
+    fireEvent.press(getByLabelText("Quick reply: Yes"));
+    const quickReplyCall = (Alert.alert as jest.Mock).mock.calls.find(
+      (call) => call[0] === "Quick Reply",
+    );
+
+    expect(quickReplyCall).toBeTruthy();
+    const buttons = quickReplyCall?.[2] as Array<{
+      text: string;
+      onPress?: () => void;
+    }>;
+    const sendButton = buttons.find((button) => button.text === "Send");
+    expect(sendButton?.onPress).toBeDefined();
+
+    sendButton?.onPress?.();
+
+    expect(Alert.alert).toHaveBeenCalledWith('Sent', '"Yes" has been sent.');
+  });
+
+  it("shows and sends quick replies for other preset chips", () => {
+    const { getByLabelText } = render(
+      <MessagesScreen {...(makeProps() as any)} />,
+    );
+
+    fireEvent.press(getByLabelText("Quick reply: On my way"));
+
+    const actions = (Alert.alert as jest.Mock).mock.calls[0][2] as Array<{
+      text: string;
+      onPress?: () => void;
+    }>;
+    const sendAction = actions.find((action) => action.text === "Send");
+    expect(sendAction).toBeTruthy();
+    sendAction?.onPress?.();
+
+    expect(Alert.alert).toHaveBeenNthCalledWith(
+      2,
+      "Sent",
+      '"On my way" has been sent.',
+    );
+
+    fireEvent.press(getByLabelText("Quick reply: Call me"));
+    expect(Alert.alert).toHaveBeenLastCalledWith(
+      "Quick Reply",
+      'Send quick reply: "Call me"?',
+      expect.any(Array),
+    );
+  });
+
   it("shows conversation alert when message card is pressed", () => {
     const { getByLabelText } = render(
       <MessagesScreen {...(makeProps() as any)} />,
@@ -123,6 +195,38 @@ describe("MessagesScreen", () => {
 
     fireEvent.press(
       getByLabelText(/Message from Robert Martinez.*Morning walk/),
+    );
+
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Open Conversation",
+      "View full conversation with Robert Martinez.",
+      expect.any(Array),
+    );
+  });
+
+  it("opens unread conversation when unread message card is pressed", () => {
+    const { getByLabelText } = render(
+      <MessagesScreen {...(makeProps() as any)} />,
+    );
+
+    fireEvent.press(
+      getByLabelText(/Message from Robert Martinez.*prescription.*unread/),
+    );
+
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Open Conversation",
+      "View full conversation with Robert Martinez.",
+      expect.any(Array),
+    );
+  });
+
+  it("shows conversation alert for the unread message card", () => {
+    const { getByLabelText } = render(
+      <MessagesScreen {...(makeProps() as any)} />,
+    );
+
+    fireEvent.press(
+      getByLabelText(/Message from Robert Martinez.*prescription.*unread/),
     );
 
     expect(Alert.alert).toHaveBeenCalledWith(
@@ -172,6 +276,33 @@ describe("MessagesScreen", () => {
       "Physical Therapy Appointment\nTime: 02:00 PM\nLocation: At clinic",
       expect.any(Array),
     );
+  });
+
+  it("navigates to each tab from the bottom nav", () => {
+    const props = makeProps();
+    const { getByLabelText } = render(<MessagesScreen {...(props as any)} />);
+
+    fireEvent.press(getByLabelText("Go to Home"));
+    fireEvent.press(getByLabelText("Go to Tasks"));
+    fireEvent.press(getByLabelText("Go to Calendar"));
+    fireEvent.press(getByLabelText("Go to Messages"));
+    fireEvent.press(getByLabelText("Go to Profile"));
+
+    expect(props.navigation.navigate).toHaveBeenNthCalledWith(1, "AppTabs", {
+      screen: "Home",
+    });
+    expect(props.navigation.navigate).toHaveBeenNthCalledWith(2, "AppTabs", {
+      screen: "Tasks",
+    });
+    expect(props.navigation.navigate).toHaveBeenNthCalledWith(3, "AppTabs", {
+      screen: "Calendar",
+    });
+    expect(props.navigation.navigate).toHaveBeenNthCalledWith(4, "AppTabs", {
+      screen: "Messages",
+    });
+    expect(props.navigation.navigate).toHaveBeenNthCalledWith(5, "AppTabs", {
+      screen: "Profile",
+    });
   });
 
   describe("Accessibility Enhancements", () => {

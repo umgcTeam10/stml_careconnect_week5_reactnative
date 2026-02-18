@@ -1,0 +1,32 @@
+appId: com.anonymous.careconnectweek5rn
+---
+- launchApp
+- assertVisible: "CareConnect"
+
+- tapOn:
+    id: "welcome-get-started"
+- tapOn:
+    id: "role-caregiver"
+- tapOn:
+    id: "role-continue"
+
+- tapOn:
+    id: "login-email"
+- inputText: "user@example.com"
+- tapOn:
+    id: "login-password"
+- inputText: "123456"
+- tapOn:
+    id: "login-submit"
+
+- assertVisible: "Your Health Today"
+- tapOn: "Calendar"
+- assertVisible: "Today's Schedule"
+- tapOn: "Messages"
+- assertVisible: "Emergency SOS"
+- tapOn: "Profile"
+- assertVisible: "Sarah Johnson"
+- tapOn: "Home"
+- assertVisible: "Your Health Today"
+- tapOn: "Log Wellness Check"
+- assertVisible: "BP Today"

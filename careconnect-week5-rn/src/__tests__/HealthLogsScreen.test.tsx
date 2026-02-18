@@ -260,6 +260,60 @@ describe("HealthLogsScreen", () => {
     expect(scrollView).toBeTruthy();
   });
 
+  it("shows summary card alerts when summary cards are pressed", () => {
+    const { getByLabelText } = render(
+      <HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />,
+    );
+
+    fireEvent.press(getByLabelText(/Blood pressure today/i));
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Blood Pressure Details",
+      "View detailed blood pressure information and history.",
+      expect.any(Array),
+    );
+
+    fireEvent.press(getByLabelText(/Medications today/i));
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Medications Details",
+      "View detailed medications information and history.",
+      expect.any(Array),
+    );
+
+    fireEvent.press(getByLabelText(/Meals today/i));
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Meals Details",
+      "View detailed meals information and history.",
+      expect.any(Array),
+    );
+
+    fireEvent.press(getByLabelText(/Mood today/i));
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Mood Details",
+      "View detailed mood information and history.",
+      expect.any(Array),
+    );
+  });
+
+  it("shows add-log and appointment alerts", () => {
+    const { getByTestId } = render(
+      <HealthLogsScreen navigation={mockNavigation as any} route={{} as any} />,
+    );
+
+    fireEvent.press(getByTestId("health-logs-fab"));
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Add Health Log",
+      "Feature coming soon: Record a new health log entry.",
+      expect.any(Array),
+    );
+
+    fireEvent.press(getByTestId("appointment-view"));
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Appointment Details",
+      "Physical Therapy Appointment\nTime: 02:00 PM\nLocation: At clinic",
+      expect.any(Array),
+    );
+  });
+
   describe("Accessibility Enhancements", () => {
     it("summary cards have proper accessibility roles", () => {
       const { getByLabelText } = render(

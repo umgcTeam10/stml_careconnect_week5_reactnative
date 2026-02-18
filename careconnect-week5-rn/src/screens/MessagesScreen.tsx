@@ -422,6 +422,14 @@ function BottomBar({
   onTap: (index: number) => void;
   onNowTap: () => void;
 }) {
+  const navItems = [
+    { icon: "🏠", label: "Home" },
+    { icon: "✓", label: "Tasks" },
+    { icon: "📅", label: "Calendar" },
+    { icon: "💬", label: "Messages" },
+    { icon: "👤", label: "Profile" },
+  ] as const;
+
   return (
     <View>
       <View
@@ -471,6 +479,26 @@ function BottomBar({
           <Text style={styles.nowViewText}>View</Text>
           <Text style={styles.nowViewText}> →</Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.navBar}>
+        {navItems.map((item, index) => (
+          <TouchableOpacity
+            key={item.label}
+            accessibilityRole="button"
+            accessibilityLabel={`Go to ${item.label}`}
+            accessibilityState={{ selected: item.label === "Messages" }}
+            onPress={() => onTap(index)}
+            style={styles.navItem}
+          >
+            <Text
+              style={styles.navIcon}
+              importantForAccessibility="no-hide-descendants"
+            >
+              {item.icon}
+            </Text>
+            <Text style={styles.navLabel}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
